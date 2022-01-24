@@ -11,8 +11,6 @@ class FeatureTest extends TestCase
         parent::setUp();
 
         Event::fake();
-
-        config(['auth.providers.users.model' => User::class]);
     }
 
     public function test_basic_features()

@@ -1,6 +1,6 @@
 {
-    "name": "overtrue/laravel-package",
-    "description": "Laravel package template",
+    "name": "overtrue/laravel-cos-federation-token",
+    "description": "QCloud COS FederationToken generator for Laravel.",
     "license": "MIT",
     "authors": [
         {
@@ -9,11 +9,12 @@
         }
     ],
     "require": {
-        "laravel/framework": "^8.0"
+        "php": "^8.0.2",
+        "laravel/framework": "^8.75"
     },
     "autoload": {
         "psr-4": {
-            "Overtrue\\LaravelPackage\\": "src"
+            "Overtrue\\LaravelCosFederationToken\\": "src"
         }
     },
     "autoload-dev": {
@@ -33,7 +34,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "\\Overtrue\\LaravelPackage\\PackageServiceProvider"
+                "Overtrue\\CosFederationToken\\FederationTokenServiceProvider"
             ]
         },
         "hooks": {
@@ -69,5 +70,10 @@
         "test": "Run all tests.",
         "check-style": "Run style checks (only dry run - no fixing!).",
         "fix-style": "Run style checks and fix violations."
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     }
 }

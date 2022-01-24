@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Overtrue\LaravelPackage\PackageServiceProvider;
+use Overtrue\LaravelCosFederationToken\FederationTokenServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -13,9 +13,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      *
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
-        return [PackageServiceProvider::class];
+        return [FederationTokenServiceProvider::class];
     }
 
     /**
@@ -32,12 +32,5 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->loadMigrationsFrom(__DIR__ . '/migrations');
-        $this->loadMigrationsFrom(dirname(__DIR__) . '/migrations');
     }
 }

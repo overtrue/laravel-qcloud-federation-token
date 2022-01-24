@@ -1,14 +1,14 @@
-Laravel Package
+Laravel COS FederationToke generator.
 ---
 
-Laravel package template.
+[QCloud COS FederationToken](https://cloud.tencent.com/document/product/1312/48195) generator for Laravel.
 
 [![Sponsor me](https://github.com/overtrue/overtrue/blob/master/sponsor-me-button-s.svg?raw=true)](https://github.com/sponsors/overtrue)
 
 ## Installing
 
 ```shell
-$ composer require overtrue/laravel-package -vvv
+$ composer require overtrue/laravel-cos-federation-token -vvv
 ```
 
 ### Migrations
