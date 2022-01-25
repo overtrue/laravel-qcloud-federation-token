@@ -1,6 +1,6 @@
 <?php
 
-namespace Overtrue\LaravelCosFederationToken;
+namespace Overtrue\LaravelQcloudFederationToken;
 
 use Illuminate\Config\Repository;
 use JetBrains\PhpStorm\Pure;
@@ -20,28 +20,28 @@ class Strategy
         }
     }
 
-    public function getPrincipals(): array
-    {
-        return $this->config->get('principals', []);
-    }
-
-    public function getEffect()
+    public function getEffect(): string
     {
         return $this->config->get('effect', 'allow');
     }
 
-    public function getActions()
+    public function getActions(): array
     {
-        return $this->config->get('actions', 'cos:PutObject');
+        return $this->config->get('actions', ['cos:PutObject']);
     }
 
-    public function getConditions()
+    public function getConditions(): array
     {
-        return $this->config->get('conditions', null);
+        return $this->config->get('conditions', []);
     }
 
-    public function getResources()
+    public function getResources(): array
     {
-        return $this->config->get('resources', null);
+        return $this->config->get('resources', []);
+    }
+
+    public function getExpiresIn()
+    {
+        return $this->config->get('expires_in', 1800);
     }
 }

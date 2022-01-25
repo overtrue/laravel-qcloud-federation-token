@@ -1,6 +1,6 @@
 <?php
 
-namespace Overtrue\LaravelCosFederationToken\Exceptions;
+namespace Overtrue\LaravelQcloudFederationToken\Exceptions;
 
 class Exception extends \Exception
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Overtrue\LaravelCosFederationToken\Events;
+namespace Overtrue\LaravelQcloudFederationToken\Events;
 
-use Overtrue\LaravelCosFederationToken\Token;
+use Overtrue\LaravelQcloudFederationToken\Token;
 
 class TokenCreated
 {

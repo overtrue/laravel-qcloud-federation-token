@@ -1,11 +1,11 @@
 <?php
 
-namespace Overtrue\LaravelCosFederationToken;
+namespace Overtrue\LaravelQcloudFederationToken;
 
 use Illuminate\Config\Repository;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Pure;
-use Overtrue\LaravelCosFederationToken\Exceptions\InvalidArgumentException;
+use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 
 class Manager
 {
@@ -20,7 +20,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelCosFederationToken\Exceptions\InvalidArgumentException
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
     public function strategy(string $strategy = null)
     {
@@ -41,7 +41,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelCosFederationToken\Exceptions\InvalidArgumentException
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
     protected function createStrategy($strategy): Strategy
     {
@@ -71,7 +71,7 @@ class Manager
     }
 
     /**
-     * @return array<\Overtrue\LaravelCosFederationToken\Strategy>
+     * @return array<\Overtrue\LaravelQcloudFederationToken\Strategy>
      */
     public function getStrategies(): array
     {
@@ -86,7 +86,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelCosFederationToken\Exceptions\InvalidArgumentException
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
     public function __call($method, $parameters)
     {

@@ -10,11 +10,11 @@
     ],
     "require": {
         "php": "^8.0.2",
-        "laravel/framework": "^8.75"
+        "laravel/framework": "^8.80"
     },
     "autoload": {
         "psr-4": {
-            "Overtrue\\LaravelCosFederationToken\\": "src"
+            "Overtrue\\LaravelQcloudFederationToken\\": "src"
         }
     },
     "autoload-dev": {

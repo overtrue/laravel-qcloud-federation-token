@@ -1,49 +1,60 @@
-Laravel COS FederationToke generator.
+Laravel QCloud FederationToken generator.
 ---
 
-[QCloud COS FederationToken](https://cloud.tencent.com/document/product/1312/48195) generator for Laravel.
+![Laravel Octane Ready Status](https://img.shields.io/badge/Octance-ready-green?style=flat-square)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/overtrue/laravel-qcloud-federation-token?style=flat-square)
+![GitHub License](https://img.shields.io/github/license/overtrue/laravel-qcloud-federation-token?style=flat-square)
+![Packagist Downloads](https://img.shields.io/packagist/dt/overtrue/laravel-qcloud-federation-token?style=flat-square)
+
+Laravel [腾讯云联合身份临时访问凭证](https://cloud.tencent.com/document/product/1312/48195) 生成器。
 
 [![Sponsor me](https://github.com/overtrue/overtrue/blob/master/sponsor-me-button-s.svg?raw=true)](https://github.com/sponsors/overtrue)
 
-## Installing
+开始之前，请您仔细阅读并理解一下官方文档：
+
+- [获取联合身份临时访问凭证](https://cloud.tencent.com/document/product/1312/48195)
+- [CAM 策略语法](https://cloud.tencent.com/document/product/598/10603)
+- [临时证书](https://cloud.tencent.com/document/api/1312/48198#Credentials)
+
+## 安装
 
 ```shell
-$ composer require overtrue/laravel-cos-federation-token -vvv
+$ composer require overtrue/laravel-qcloud-federation-token -vvv
 ```
 
-### Migrations
+### 配置
 
-This step is also optional, if you want to custom the pivot table, you can publish the migration files:
+你可以通过以下命令将配置文件写入 `config/qcloud-federation-token.php`:
 
 ```php
-$ php artisan vendor:publish --provider="Overtrue\\LaravelPackage\\PackageServiceProvider" --tag=migrations
+$ php artisan vendor:publish --provider="Overtrue\\LaravelQcloudFederationToken\\PackageServiceProvider" --tag=config
 ```
 
-## Usage
+## 使用
 
 TODO
 
-### Events
+### 事件
 
-| **Event**                                       | **Description**                             |
-| ----------------------------------------------- | ------------------------------------------- |
-| `Overtrue\LaravelPackage\Events\SampleEvent`    | Sample description.                         |
+| **Event**                                    | **Description**     |
+|----------------------------------------------|---------------------|
+| `Overtrue\LaravelPackage\Events\SampleEvent` | Sample description. |
 
-## :heart: Sponsor me 
+## :heart: 赞助我 
 
 [![Sponsor me](https://github.com/overtrue/overtrue/blob/master/sponsor-me.svg?raw=true)](https://github.com/sponsors/overtrue)
 
 如果你喜欢我的项目并想支持它，[点击这里 :heart:](https://github.com/sponsors/overtrue)
 
-## Contributing
+## 贡献代码
 
-You can contribute in one of three ways:
+你可以通过以下方式参与贡献:
 
-1. File bug reports using the [issue tracker](https://github.com/overtrue/laravel-package/issues).
-2. Answer questions or fix bugs on the [issue tracker](https://github.com/overtrue/laravel-package/issues).
-3. Contribute new features or update the wiki.
+1. 通过 [issue tracker](https://github.com/overtrue/laravel-package/issues) 提交 Bug；
+2. 通过 [issue tracker](https://github.com/overtrue/laravel-package/issues) 回答问题或修复 Bug；
+3. 通过 Pull Request 增加新特性或优化文档。
 
-_The code contribution process is not very formal. You just need to make sure that you follow the PSR-0, PSR-1, and PSR-2 coding guidelines. Any new code contributions must be accompanied by unit tests where applicable._
+_代码贡献过程不需要很正式。你只需要确保你遵循 PSR-0、PSR-1 和 PSR-2 的编码准则。任何新的代码贡献都必须附带对应的单元测试。_
 
 ## Project supported by JetBrains
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Overtrue\LaravelCosFederationToken;
+namespace Overtrue\LaravelQcloudFederationToken;
 
 /**
  * @see https://cloud.tencent.com/document/api/1312/48198#Credentials

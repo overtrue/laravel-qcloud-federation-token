@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Overtrue\LaravelCosFederationToken\FederationTokenServiceProvider;
+use Overtrue\LaravelQcloudFederationToken\ServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -11,11 +11,11 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      *
      * @param \Illuminate\Foundation\Application $app
      *
-     * @return array
+     * @return array<int, class-string>
      */
     protected function getPackageProviders($app): array
     {
-        return [FederationTokenServiceProvider::class];
+        return [ServiceProvider::class];
     }
 
     /**
