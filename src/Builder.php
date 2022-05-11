@@ -3,31 +3,50 @@
 namespace Overtrue\LaravelQcloudFederationToken;
 
 use Carbon\Carbon;
+use Overtrue\LaravelQcloudFederationToken\Exceptions\HttpException;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
+use TencentCloud\Common\Credential;
+use TencentCloud\Common\Profile\ClientProfile;
+use TencentCloud\Common\Profile\HttpProfile;
+use TencentCloud\Sts\V20180813\Models\GetFederationTokenRequest;
+use TencentCloud\Sts\V20180813\StsClient;
+use Throwable;
 
 class Builder
 {
     protected string $name;
+    protected array $principal;
     protected array $actions;
     protected array $resources;
     protected array $conditions;
-    protected int $expiresIn = 1800;
     protected string $effect = 'allow';
+    protected int $expiresIn = 1800;
 
     public const MAX_EXPIRES_IN = 7200;
 
-    public function __construct(?string $name = null, ?Strategy $strategy = null)
-    {
-        $this->name = $name ?? \config('app.name');
-
-        if ($strategy) {
-            $this->applyStrategy($strategy);
-        }
+    public function __construct(
+        protected string $secretId,
+        protected string $secretKey,
+        protected string $region = 'ap-guangzhou',
+        protected string $endpoint = 'sts.tencentcloudapi.com'
+    ) {
+        $this->name = \config('app.name');
     }
 
     public function expiresIn(int $expiresIn): static
     {
         $this->expiresIn = \min($expiresIn, static::MAX_EXPIRES_IN);
+
+        return $this;
+    }
+
+    public function principal(int $uid, int $uin = null): static
+    {
+        $this->principal = [
+            'qcs' => [
+                "qcs::cam::uid/$uid".($uin ? ":uin/$uin" : ''),
+            ]
+        ];
 
         return $this;
     }
@@ -47,7 +66,7 @@ class Builder
         return $this;
     }
 
-    public function withName(string $name): static
+    public function name(string $name): static
     {
         $this->name = $name;
 
@@ -89,28 +108,55 @@ class Builder
         return $this;
     }
 
+    /**
+     * @throws HttpException
+     */
     public function build(): Token
     {
-        //return new Token();
-    }
+        try {
+            $credential = new Credential($this->secretId, $this->secretKey);
+            $httpProfile = new HttpProfile();
+            $httpProfile->setEndpoint($this->endpoint ?: 'sts.tencentcloudapi.com');
 
-    // todo:
-    protected function applyStrategy(Strategy $strategy): void
-    {
-        if (!empty($strategy->getActions())) {
-            $this->actions($strategy->getActions());
-        }
+            $clientProfile = new ClientProfile();
+            $clientProfile->setHttpProfile($httpProfile);
+            $client = new StsClient($credential, $this->region ?: 'ap-guangzhou', $clientProfile);
 
-        if (!empty($strategy->getResources())) {
-            $this->resources($strategy->getResources());
-        }
+            $request = new GetFederationTokenRequest();
 
-        if (!empty($strategy->getConditions())) {
-            $this->conditions($strategy->getConditions());
-        }
+            $request->fromJsonString(json_encode([
+                'Name' => $this->name,
+                'Policy' => \json_encode([
+                    'version' => '2.0',
+                    'statement' => [
+                        [
+                            'principal' => $this->principal,
+                            'effect' => $this->effect,
+                            'action' => $this->actions,
+                            'resource' => $this->resources,
+                            'condition' => $this->conditions,
+                        ],
+                    ],
+                ]),
+                'DurationSeconds' => $this->expiresIn,
+            ]));
 
-        if ($strategy->getExpiresIn() !== null) {
-            $this->expiresIn($strategy->getExpiresIn());
+            $response = $client->GetFederationToken($request);
+
+            $credentials = new Credentials(
+                $response->getCredentials()->getToken(),
+                $response->getCredentials()->getTmpSecretId(),
+                $response->getCredentials()->getTmpSecretKey()
+            );
+
+            return new Token(
+                $credentials,
+                $response->getExpiredTime(),
+                $response->getExpiration(),
+                $response->getRequestId()
+            );
+        } catch (Throwable $e) {
+            throw new HttpException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }

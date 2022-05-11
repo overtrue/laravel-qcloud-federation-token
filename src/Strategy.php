@@ -20,6 +20,26 @@ class Strategy
         }
     }
 
+    public function getSecretId()
+    {
+        return $this->config->get('secret_id');
+    }
+
+    public function getSecretKey()
+    {
+        return $this->config->get('secret_key');
+    }
+
+    public function getEndpoint()
+    {
+        return $this->config->get('endpoint');
+    }
+
+    public function getRegion()
+    {
+        return $this->config->get('region');
+    }
+
     public function getEffect(): string
     {
         return $this->config->get('effect', 'allow');
@@ -43,5 +63,31 @@ class Strategy
     public function getExpiresIn()
     {
         return $this->config->get('expires_in', 1800);
+    }
+
+    /**
+     * @throws Exceptions\HttpException
+     */
+    public function build(): Token
+    {
+        $builder = new Builder($this->getSecretId(), $this->getSecretKey(), $this->getRegion(), $this->getEndpoint());
+
+        if (!empty($this->getActions())) {
+            $builder->actions($this->getActions());
+        }
+
+        if (!empty($this->getResources())) {
+            $builder->resources($this->getResources());
+        }
+
+        if (!empty($this->getConditions())) {
+            $builder->conditions($this->getConditions());
+        }
+
+        if ($this->getExpiresIn() !== null) {
+            $builder->expiresIn($this->getExpiresIn());
+        }
+
+        return $builder->build();
     }
 }
