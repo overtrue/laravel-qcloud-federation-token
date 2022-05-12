@@ -30,6 +30,11 @@ class Strategy
         return $this->config->get('secret_key');
     }
 
+    public function getPrincipal()
+    {
+        return $this->config->get('principal');
+    }
+
     public function getEndpoint()
     {
         return $this->config->get('endpoint');
@@ -47,17 +52,17 @@ class Strategy
 
     public function getActions(): array
     {
-        return $this->config->get('actions', ['cos:PutObject']);
+        return $this->config->get('action', []);
     }
 
     public function getConditions(): array
     {
-        return $this->config->get('conditions', []);
+        return $this->config->get('condition', []);
     }
 
     public function getResources(): array
     {
-        return $this->config->get('resources', []);
+        return $this->config->get('resource', []);
     }
 
     public function getExpiresIn()
@@ -70,7 +75,16 @@ class Strategy
      */
     public function build(): Token
     {
+        return $this->getBuilder()->build();
+    }
+
+    public function getBuilder(): Builder
+    {
         $builder = new Builder($this->getSecretId(), $this->getSecretKey(), $this->getRegion(), $this->getEndpoint());
+
+        if (!empty($this->getPrincipal())) {
+            $builder->principal($this->getPrincipal());
+        }
 
         if (!empty($this->getActions())) {
             $builder->actions($this->getActions());
@@ -88,6 +102,6 @@ class Strategy
             $builder->expiresIn($this->getExpiresIn());
         }
 
-        return $builder->build();
+        return $builder;
     }
 }

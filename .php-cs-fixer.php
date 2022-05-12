@@ -45,5 +45,4 @@ return (new PhpCsFixer\Config())
         PhpCsFixer\Finder::create()
             ->exclude('vendor')
             ->in([__DIR__.'/src/', __DIR__.'/tests/'])
-    )
-;
+    );

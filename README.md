@@ -27,12 +27,29 @@ $ composer require overtrue/laravel-qcloud-federation-token -vvv
 你可以通过以下命令将配置文件写入 `config/qcloud-federation-token.php`:
 
 ```php
-$ php artisan vendor:publish --provider="Overtrue\\LaravelQcloudFederationToken\\PackageServiceProvider" --tag=config
+$ php artisan vendor:publish --provider="Overtrue\\LaravelQCloudFederationToken\\QCloudFederationTokenServiceProvider"
 ```
 
 ## 使用
 
-TODO
+```php
+use Overtrue\LaravelQCloudFederationToken\FederationToken;
+
+$token = FederationToken::build();
+// 或者指定策略
+$token = FederationToken::strategy('cos')->build();
+
+$token->toArray();
+
+// 'credentials' => [
+//     'token' => 'kTRtHpOSOCUzTVWmzlPKweHffXjT9Izo7b61a142d6b56d31c0a7ace4d22bcff3zpbsXKTIrCo43dRRh7bDIKE1ZOE1KRYHEm0KNLjWG_aSF63YoQWchg',
+//     'tmp_secret_id' => 'AKIDw7dwZbmFSup9CnAOraJ7skiPMybaV3WPP5B4oVMCIL5kLyphV_3IyAHFJ5QMCjE6',
+//     'tmp_secret_key' => '/lvEo280/AlGt4orjDl9tWLIOMl5nkexS5Pg+xys7ps=',
+// ],
+// 'expired_at' => 1547696355,
+```
+
+格式请参考： https://cloud.tencent.com/document/product/1312/48195
 
 ### 事件
 
@@ -40,7 +57,7 @@ TODO
 |----------------------------------------------|---------------------|
 | `Overtrue\LaravelPackage\Events\SampleEvent` | Sample description. |
 
-## :heart: 赞助我 
+## :heart: 赞助我
 
 [![Sponsor me](https://github.com/overtrue/overtrue/blob/master/sponsor-me.svg?raw=true)](https://github.com/sponsors/overtrue)
 
@@ -61,7 +78,6 @@ _代码贡献过程不需要很正式。你只需要确保你遵循 PSR-0、PSR-
 Many thanks to Jetbrains for kindly providing a license for me to work on this and other open-source projects.
 
 [![](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/overtrue)
-
 
 ## PHP 扩展包开发
 

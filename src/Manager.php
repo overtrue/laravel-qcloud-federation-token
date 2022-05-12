@@ -2,10 +2,12 @@
 
 namespace Overtrue\LaravelQcloudFederationToken;
 
+use Closure;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Pure;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
+use function array_key_first;
 
 class Manager
 {
@@ -20,7 +22,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function strategy(string $strategy = null)
     {
@@ -41,7 +43,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function createStrategy($strategy): Strategy
     {
@@ -53,6 +55,8 @@ class Manager
             if (method_exists($this, $method)) {
                 return $this->$method();
             }
+
+            return new Strategy($this->config->get("strategies.$strategy"));
         }
 
         throw new InvalidArgumentException("Strategy [$strategy] not supported.");
@@ -63,7 +67,7 @@ class Manager
         return $this->customCreators[$strategy]($this->config->get("strategies.{$strategy}"));
     }
 
-    public function extend($strategy, \Closure $callback): static
+    public function extend($strategy, Closure $callback): static
     {
         $this->customCreators[$strategy] = $callback;
 
@@ -71,7 +75,7 @@ class Manager
     }
 
     /**
-     * @return array<\Overtrue\LaravelQcloudFederationToken\Strategy>
+     * @return array<Strategy>
      */
     public function getStrategies(): array
     {
@@ -86,7 +90,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __call($method, $parameters)
     {
@@ -95,6 +99,6 @@ class Manager
 
     protected function getDefaultStrategy(): ?string
     {
-        return \array_key_first($this->config->get('strategies'));
+        return array_key_first($this->config->get('strategies'));
     }
 }

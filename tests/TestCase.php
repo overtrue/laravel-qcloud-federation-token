@@ -2,26 +2,27 @@
 
 namespace Tests;
 
-use Overtrue\LaravelQcloudFederationToken\ServiceProvider;
+use Illuminate\Foundation\Application;
+use Overtrue\LaravelQcloudFederationToken\QCloudFederationTokenServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * Load package service provider.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  Application  $app
      *
      * @return array<int, class-string>
      */
     protected function getPackageProviders($app): array
     {
-        return [ServiceProvider::class];
+        return [QCloudFederationTokenServiceProvider::class];
     }
 
     /**
      * Define environment setup.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  Application  $app
      */
     protected function getEnvironmentSetUp($app)
     {
