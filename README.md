@@ -30,6 +30,10 @@ $ composer require overtrue/laravel-qcloud-federation-token -vvv
 $ php artisan vendor:publish --provider="Overtrue\\LaravelQCloudFederationToken\\QCloudFederationTokenServiceProvider"
 ```
 
+配置语法请参考：https://cloud.tencent.com/document/product/598/10603
+
+你可以根据使用场景配置多个策略，然后按策略分发访问凭证。
+
 ## 使用
 
 ```php
