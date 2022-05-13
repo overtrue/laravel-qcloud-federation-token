@@ -45,9 +45,18 @@ class FeatureTest extends TestCase
 
         config([
             'qcloud-federation-token' => [
+                'default' => [
+                    'secret_id' => 'default-secret-id',
+                    'expired_at' => '+1 hour',
+                ],
                 'strategies' => [
-                    'default' => array_merge([
+                    'cvm' => array_merge([
                         'secret_id' => 'secret-id',
+                        'secret_key' => 'secret-key',
+                        'region' => 'ap-tokyo',
+                    ], $statement),
+
+                    'cos' => array_merge([
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
                     ], $statement),
@@ -55,8 +64,11 @@ class FeatureTest extends TestCase
             ],
         ]);
 
-        $builder = FederationToken::getBuilder();
 
+        $this->assertSame('secret-id', FederationToken::getSecretId());
+        $this->assertSame('default-secret-id', FederationToken::strategy('cos')->getSecretId());
+
+        $builder = FederationToken::getBuilder();
         $this->assertSame([$statement], $builder->getStatement());
     }
 }

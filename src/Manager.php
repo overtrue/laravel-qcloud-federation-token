@@ -49,17 +49,22 @@ class Manager
     {
         if (isset($this->customCreators[$strategy])) {
             return $this->callCustomCreator($strategy);
-        } else {
+        } elseif (\array_key_exists($strategy, $this->config->get('strategies'))) {
             $method = 'create'.Str::studly($strategy).'Strategy';
 
             if (method_exists($this, $method)) {
                 return $this->$method();
             }
 
-            return new Strategy($this->config->get("strategies.$strategy"));
+            return new Strategy($this->getStrategyConfig($strategy));
         }
 
         throw new InvalidArgumentException("Strategy [$strategy] not supported.");
+    }
+
+    protected function getStrategyConfig(string $strategyName): array
+    {
+        return \array_merge($this->config->get('default', []), $this->config->get("strategies.$strategyName", []));
     }
 
     protected function callCustomCreator(string $strategy): Strategy
