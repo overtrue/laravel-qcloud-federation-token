@@ -1,4 +1,4 @@
-Laravel QCloud FederationToken generator.
+Laravel 腾讯云联合身份临时访问凭证生成器
 ---
 
 ![Laravel Octane Ready Status](https://img.shields.io/badge/Octance-ready-green?style=flat-square)
@@ -6,7 +6,7 @@ Laravel QCloud FederationToken generator.
 ![GitHub License](https://img.shields.io/github/license/overtrue/laravel-qcloud-federation-token?style=flat-square)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/overtrue/laravel-qcloud-federation-token?style=flat-square)
 
-Laravel [腾讯云联合身份临时访问凭证](https://cloud.tencent.com/document/product/1312/48195) 生成器。
+Laravel [腾讯云联合身份临时访问凭证](https://cloud.tencent.com/document/product/1312/48195) 生成器，主要用于下发腾讯云联合身份临时访问凭证，比如前段直传等场景。
 
 [![Sponsor me](https://github.com/overtrue/overtrue/blob/master/sponsor-me-button-s.svg?raw=true)](https://github.com/sponsors/overtrue)
 
