@@ -68,6 +68,7 @@ return [
     'strategies' => [
         // 请参考：https://cloud.tencent.com/document/product/598/10603
         'cos' => [
+            // 将与默认配置合并
             'variables' => [
                 'appid' => env('QCLOUD_APP_ID'),
                 'bucket' => env('QCLOUD_COS_BUCKET', ''),
