@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use function config;
 use function dirname;
 
-class QCloudFederationTokenServiceProvider extends ServiceProvider
+class QcloudFederationTokenServiceProvider extends ServiceProvider
 {
     public function boot()
     {

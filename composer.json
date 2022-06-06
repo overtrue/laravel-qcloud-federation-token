@@ -35,7 +35,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Overtrue\\LaravelQCloudFederationToken\\QCloudFederationTokenServiceProvider"
+        "Overtrue\\LaravelQcloudFederationToken\\QCloudFederationTokenServiceProvider"
       ]
     },
     "hooks": {
