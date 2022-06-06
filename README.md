@@ -34,6 +34,94 @@ $ php artisan vendor:publish --provider="Overtrue\\LaravelQCloudFederationToken\
 
 你可以根据使用场景配置多个策略，然后按策略分发访问凭证。
 
+### 变量替换
+
+在配置中难免会用到各种上下文变量或者一些动态 resouce 路径等，你可以在配置中指定 `variables` 变量来实现变量替换，例如：
+
+> 仅 principal 和 resource 中的变量可以替换，其他变量不支持替换。
+
+```php
+// config/qcloud-federation-token.php
+<?php
+
+return [
+    // 默认配置，strategies 下的每一个策略将合并此基础配置
+    'default' => [
+        'secret_id' => env('QCLOUD_COS_SECRET_ID', ''),
+        'secret_key' => env('QCLOUD_COS_SECRET_KEY', ''),
+        'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
+        "principal" => [
+            "qcs" => [
+                "qcs::cam::uid/{uid}:uin/{uin}",
+            ]
+        ],
+        
+        // 全局变量，会被替换到所有策略中
+        'variables' => [
+            'uid' => env('QCLOUD_UID'),
+            'uin' => env('QCLOUD_UIN', ''),
+            'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
+            //...
+        ],
+    ],
+    // strategies
+    'strategies' => [
+        // 请参考：https://cloud.tencent.com/document/product/598/10603
+        'cos' => [
+            'variables' => [
+                'appid' => env('QCLOUD_APP_ID'),
+                'bucket' => env('QCLOUD_COS_BUCKET', ''),
+                //...
+            ],
+            "effect" => "allow",
+            "action" => [
+                "cos:PutObject",
+                "cos:GetObject",
+            ],
+            "resource" => [
+                "qcs::cos:ap-beijing:uid/{uid}:{bucket}-{appid}/{date}/{uuid}/*",
+            ],
+        ],
+    ],
+];
+```
+
+以上配置将会生成如下结果：
+
+```json
+{
+    "principal": {
+        "qcs": [
+            "qcs::cam::uid/123456:uin/233333"
+        ]
+    },
+    "effect": "allow",
+    "action": [
+        "cos:PutObject",
+        "cos:GetObject",
+    ],
+    "resource": [
+        "qcs::cos:ap-beijing:uid/123456:example-12278900/20220202/bbeae9bb-d650-46f9-aab3-f4171a1bfdea/*"
+    ]
+}
+```
+
+### 内置变量如下
+
+- `{uuid}` - UUID 例如：`ca007813-4a49-4d5a-afab-abae18a969a5`
+- `{timestamp}` - 当前时间戳，例如：`1654485526`
+- `{random}` - 随机字符串，16 位，例如：`Bbq6gkXXIPyCDsEL`
+- `{random:32}` - 随机字符串，32 位，例如：`FykbMqi6GT6JHiyv6E2xqUeo3CZLPjo7`
+- `{date}` - 日期，例如：`20220606`
+- `{Ymd}` - 日期，例如：`20220606`
+- `{YmdHis}` - 日期时间（年月日时分秒），例如：`20220606031846`
+- `{Y}` - 年，例如：`2022`
+- `{m}` - 月，例如：`06`
+- `{d}` - 日，例如：`06`
+- `{H}` - 时，例如：`03`
+- `{i}` - 分，例如：`18`
+- `{s}` - 秒，例如：`46`
+
 ## 使用
 
 ```php

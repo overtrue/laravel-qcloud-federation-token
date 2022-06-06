@@ -70,6 +70,11 @@ class Strategy
         return $this->config->get('expires_in', 1800);
     }
 
+    public function getVariables()
+    {
+        return $this->config->get('variables', []);
+    }
+
     /**
      * @throws Exceptions\HttpException
      */
@@ -80,7 +85,7 @@ class Strategy
 
     public function getBuilder(): Builder
     {
-        $builder = new Builder($this->getSecretId(), $this->getSecretKey(), $this->getRegion(), $this->getEndpoint());
+        $builder = new Builder($this->getSecretId(), $this->getSecretKey(), $this->getRegion(), $this->getEndpoint(), $this->getVariables());
 
         if (!empty($this->getPrincipal())) {
             $builder->principal($this->getPrincipal());

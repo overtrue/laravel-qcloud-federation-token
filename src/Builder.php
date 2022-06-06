@@ -3,6 +3,7 @@
 namespace Overtrue\LaravelQcloudFederationToken;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Overtrue\LaravelQcloudFederationToken\Events\TokenCreated;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\HttpException;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
@@ -12,6 +13,7 @@ use TencentCloud\Common\Profile\HttpProfile;
 use TencentCloud\Sts\V20180813\Models\GetFederationTokenRequest;
 use TencentCloud\Sts\V20180813\StsClient;
 use Throwable;
+
 use function config;
 use function event;
 use function is_int;
@@ -38,9 +40,17 @@ class Builder
         protected string $secretId,
         protected string $secretKey,
         protected ?string $region = 'ap-guangzhou',
-        protected ?string $endpoint = 'sts.tencentcloudapi.com'
+        protected ?string $endpoint = 'sts.tencentcloudapi.com',
+        protected ?array $variables = []
     ) {
         $this->name = config('app.name');
+    }
+
+    public function withVariables(array $variables): static
+    {
+        $this->variables = $variables;
+
+        return $this;
     }
 
     public function expiresIn(int $expiresIn): static
@@ -130,46 +140,69 @@ class Builder
 
             $request = new GetFederationTokenRequest();
 
-            $request->fromJsonString(json_encode([
-                'Name' => $this->name,
-                'Policy' => json_encode([
-                    'version' => '2.0',
-                    'statement' => $this->getStatement(),
-                ]),
-                'DurationSeconds' => $this->expiresIn,
-            ]));
+            $request->fromJsonString(
+                json_encode([
+                    'Name' => $this->name,
+                    'Policy' => json_encode([
+                        'version' => '2.0',
+                        'statement' => $this->getStatement(),
+                    ]),
+                    'DurationSeconds' => $this->expiresIn,
+                ])
+            );
 
             $response = $client->GetFederationToken($request);
 
-            $credentials = new Credentials(
-                $response->getCredentials()->getToken(),
-                $response->getCredentials()->getTmpSecretId(),
-                $response->getCredentials()->getTmpSecretKey()
-            );
+            $credentials = new Credentials($response->getCredentials()->getToken(), $response->getCredentials()->getTmpSecretId(), $response->getCredentials()->getTmpSecretKey());
 
-            return tap(new Token(
-                $credentials,
-                $response->getExpiredTime(),
-                $response->getExpiration(),
-                $response->getRequestId()
-            ), function ($token) {
+            return tap(new Token($credentials, $response->getExpiredTime(), $response->getExpiration(), $response->getRequestId()), function ($token) {
                 event(new TokenCreated($token));
             });
         } catch (Throwable $e) {
-            throw new HttpException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new HttpException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 
     public function getStatement(): array
     {
+        $principal = $this->principal;
+        $principal['qcs'] = array_map([$this, 'replaceVariables'], $this->principal['qcs']);
+        $resources = array_map([$this, 'replaceVariables'], $this->resources);
+
         return [
             [
-                'principal' => $this->principal,
+                'principal' => $principal,
                 'effect' => $this->effect,
                 'action' => $this->actions,
-                'resource' => $this->resources,
+                'resource' => $resources,
                 'condition' => $this->conditions,
             ],
         ];
+    }
+
+    protected function replaceVariables(string $string): string
+    {
+        $variables = array_merge(...array_map(function ($key, $value) {
+            return ['{'.$key.'}' => trim($value, '{}')];
+        }, array_keys($this->variables), $this->variables));
+
+        $replacements = array_merge([
+            '{region}' => $this->region,
+            '{uuid}' => Str::uuid()->toString(),
+            '{timestamp}' => \time(),
+            '{random}' => Str::random(16),
+            '{random:32}' => Str::random(32),
+            '{date}' => \date('Ymd'),
+            '{Ymd}' => \date('Ymd'),
+            '{YmdHis}' => \date('YmdHis'),
+            '{Y}' => \date('Y'),
+            '{m}' => \date('m'),
+            '{d}' => \date('d'),
+            '{H}' => \date('H'),
+            '{i}' => \date('i'),
+            '{s}' => \date('s'),
+        ], $variables);
+
+        return str_replace(array_keys($replacements), array_values($replacements), $string);
     }
 }
