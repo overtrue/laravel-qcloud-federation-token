@@ -1,5 +1,5 @@
 {
-  "name": "overtrue/laravel-cos-federation-token",
+  "name": "overtrue/laravel-qcloud-federation-token",
   "description": "QCloud COS FederationToken generator for Laravel.",
   "license": "MIT",
   "authors": [
