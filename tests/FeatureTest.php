@@ -91,7 +91,7 @@ class FeatureTest extends TestCase
             ],
             "resource" => [
                 "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/*",
-                "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/{timestamp}/*",
+                "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/{timestamp}/{var2}/*",
                 "qcs::cos:{region}:uid/1238423:bucketB-{appid}/{date}/{Y}/{m}/{d}/object2"
             ],
             "condition" => [
@@ -113,13 +113,18 @@ class FeatureTest extends TestCase
                     ],
                 ],
                 'strategies' => [
-                    'cvm' => array_merge([
-                        'secret_id' => 'secret-id',
+                    'cos' => array_merge([
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
+                        'variables' => [
+                            'uid' => 'mock-uid-from-cos',
+                            'uin' => 'mock-uin',
+                            'appid' => 'mock-appid',
+                            'var2' => 'mock-var2',
+                        ],
                     ], $statement),
-
-                    'cos' => array_merge([
+                    'cvm' => array_merge([
+                        'secret_id' => 'secret-id',
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
                     ], $statement),
@@ -131,27 +136,28 @@ class FeatureTest extends TestCase
         $statement = $builder->getStatement();
 
         // "qcs::cam::uid/{uid}:uin/{uin}"
-        $this->assertSame(['qcs' => ['qcs::cam::uid/mock-uid:uin/mock-uin']], $statement[0]['principal']);
+        $this->assertSame(['qcs' => ['qcs::cam::uid/mock-uid-from-cos:uin/mock-uin']], $statement[0]['principal']);
 
         // "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/*",
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/%s:bucketA-%s/*',
                 'ap-tokyo',
-                'mock-uid',
-                'mock-uid',
+                'mock-uid-from-cos',
+                'mock-uid-from-cos',
             ),
             $statement[0]['resource'][0]
         );
 
-        // "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/{timestamp}/*",
+        // "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/{timestamp}/{var2}/*",
         $this->assertSame(
             sprintf(
-                'qcs::cos:%s:uid/%s:bucketA-%s/%s/*',
+                'qcs::cos:%s:uid/%s:bucketA-%s/%s/%s/*',
                 'ap-tokyo',
-                'mock-uid',
-                'mock-uid',
+                'mock-uid-from-cos',
+                'mock-uid-from-cos',
                 time(),
+                'mock-var2',
             ),
             $statement[0]['resource'][1]
         );

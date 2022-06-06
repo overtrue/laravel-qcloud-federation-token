@@ -64,7 +64,16 @@ class Manager
 
     protected function getStrategyConfig(string $strategyName): array
     {
-        return \array_merge($this->config->get('default', []), $this->config->get("strategies.$strategyName", []));
+        $variables = array_merge(
+            $this->config->get('default.variables', []),
+            $this->config->get("strategies.{$strategyName}.variables", [])
+        );
+
+        return \array_merge(
+            $this->config->get('default', []),
+            $this->config->get("strategies.$strategyName", []),
+            compact('variables')
+        );
     }
 
     protected function callCustomCreator(string $strategy): Strategy
