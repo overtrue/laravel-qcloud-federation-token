@@ -67,7 +67,7 @@ return [
                 //...
             ],
             
-            //Statement 请参考：https://cloud.tencent.com/document/product/598/10603
+            // Statement 请参考：https://cloud.tencent.com/document/product/598/10603
             "statements" => [
                 [
                     "action" => [
@@ -75,7 +75,7 @@ return [
                         "cos:GetObject",
                     ],
                     "resource" => [
-                        "qcs::cos:ap-beijing:uid/{uid}:{bucket}-{appid}/{date}/{uuid}/*",
+                        "qcs::cos:ap-beijing:uid/<appid>:<bucket>-<appid>/<date>/<uuid>/*",
                     ],
                 ]
             ],
@@ -130,7 +130,7 @@ return [
                         "cos:GetObject",
                     ],
                     "resource" => [
-                        "qcs::cos:ap-beijing:uid/{uid}:{bucket}-{appid}/{date}/{uuid}/*",
+                        "qcs::cos:ap-beijing:uid/<appid>:<bucket>-<appid>/<date>/<uuid>/*",
                     ],
                 ]
             ],
@@ -143,18 +143,13 @@ return [
 
 ```json
 {
-    "principal": {
-        "qcs": [
-            "qcs::cam::uid/123456:uin/233333"
-        ]
-    },
     "effect": "allow",
     "action": [
         "cos:PutObject",
         "cos:GetObject",
     ],
     "resource": [
-        "qcs::cos:ap-beijing:uid/123456:example-12278900/20220202/bbeae9bb-d650-46f9-aab3-f4171a1bfdea/*"
+        "qcs::cos:ap-beijing:uid/12278900:example-12278900/20220202/bbeae9bb-d650-46f9-aab3-f4171a1bfdea/*"
     ]
 }
 ```
