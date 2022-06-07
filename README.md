@@ -15,6 +15,8 @@ Laravel [腾讯云联合身份临时访问凭证](https://cloud.tencent.com/docu
 - [获取联合身份临时访问凭证](https://cloud.tencent.com/document/product/1312/48195)
 - [CAM 策略语法](https://cloud.tencent.com/document/product/598/10603)
 - [临时证书](https://cloud.tencent.com/document/api/1312/48198#Credentials)
+- [API Doctor(使用诊断)](https://console.cloud.tencent.com/api/diagnosis)
+- [COS 自助诊断工具](https://console.cloud.tencent.com/cos/diagnose)
 
 ## 安装
 
@@ -109,19 +111,19 @@ return [
 
 ### 内置变量如下
 
-- `{uuid}` - UUID 例如：`ca007813-4a49-4d5a-afab-abae18a969a5`
-- `{timestamp}` - 当前时间戳，例如：`1654485526`
-- `{random}` - 随机字符串，16 位，例如：`Bbq6gkXXIPyCDsEL`
-- `{random:32}` - 随机字符串，32 位，例如：`FykbMqi6GT6JHiyv6E2xqUeo3CZLPjo7`
-- `{date}` - 日期，例如：`20220606`
-- `{Ymd}` - 日期，例如：`20220606`
-- `{YmdHis}` - 日期时间（年月日时分秒），例如：`20220606031846`
-- `{Y}` - 年，例如：`2022`
-- `{m}` - 月，例如：`06`
-- `{d}` - 日，例如：`06`
-- `{H}` - 时，例如：`03`
-- `{i}` - 分，例如：`18`
-- `{s}` - 秒，例如：`46`
+- `<uuid>` - UUID 例如：`ca007813-4a49-4d5a-afab-abae18a969a5`
+- `<timestamp>` - 当前时间戳，例如：`1654485526`
+- `<random>` - 随机字符串，16 位，例如：`Bbq6gkXXIPyCDsEL`
+- `<random:32>` - 随机字符串，32 位，例如：`FykbMqi6GT6JHiyv6E2xqUeo3CZLPjo7`
+- `<date>` - 日期，例如：`20220606`
+- `<Ymd>` - 日期，例如：`20220606`
+- `<YmdHis>` - 日期时间（年月日时分秒），例如：`20220606031846`
+- `<Y>` - 年，例如：`2022`
+- `<m>` - 月，例如：`06`
+- `<d>` - 日，例如：`06`
+- `<H>` - 时，例如：`03`
+- `<i>` - 分，例如：`18`
+- `<s>` - 秒，例如：`46`
 
 ## 使用
 

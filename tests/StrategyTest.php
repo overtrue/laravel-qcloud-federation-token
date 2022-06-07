@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Overtrue\LaravelQcloudFederationToken\Strategy;
+use Overtrue\LaravelQcloudFederationToken\Strategies\Strategy;
 use PHPUnit\Framework\TestCase;
 
 class StrategyTest extends TestCase

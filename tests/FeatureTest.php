@@ -68,8 +68,7 @@ class FeatureTest extends TestCase
         $this->assertSame('secret-id', FederationToken::getSecretId());
         $this->assertSame('default-secret-id', FederationToken::strategy('cos')->getSecretId());
 
-        $builder = FederationToken::getBuilder();
-        $this->assertSame([$statement], $builder->getStatement());
+        $this->assertSame([$statement], FederationToken::getStatements());
     }
 
     public function test_it_can_replace_vars()
@@ -77,7 +76,7 @@ class FeatureTest extends TestCase
         $statement = [
             "principal" => [
                 "qcs" => [
-                    "qcs::cam::uid/{uid}:uin/{uin}"
+                    "qcs::cam::uid/<uid>:uin/<uin>"
                 ]
             ],
             "effect" => "allow",
@@ -90,9 +89,9 @@ class FeatureTest extends TestCase
                 "cos:GetObjectTagging"
             ],
             "resource" => [
-                "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/*",
-                "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/{timestamp}/{var2}/*",
-                "qcs::cos:{region}:uid/1238423:bucketB-{appid}/{date}/{Y}/{m}/{d}/object2"
+                "qcs::cos:<region>:uid/<uid>:bucketA-<uid>/*",
+                "qcs::cos:<region>:uid/<uid>:bucketA-<uid>/<timestamp>/<var2>/*",
+                "qcs::cos:<region>:uid/1238423:bucketB-<appid>/<date>/<Y>/<m>/<d>/object2"
             ],
             "condition" => [
                 "ip_equal" => [
@@ -110,10 +109,11 @@ class FeatureTest extends TestCase
                         'uid' => 'mock-uid',
                         'uin' => 'mock-uin',
                         'appid' => 'mock-appid',
+                        'region' => 'ap-guangzhou',
                     ],
                 ],
                 'strategies' => [
-                    'cos' => array_merge([
+                    'cos' => array_merge($statement, [
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
                         'variables' => [
@@ -122,18 +122,17 @@ class FeatureTest extends TestCase
                             'appid' => 'mock-appid',
                             'var2' => 'mock-var2',
                         ],
-                    ], $statement),
-                    'cvm' => array_merge([
+                    ]),
+                    'cvm' => array_merge($statement, [
                         'secret_id' => 'secret-id',
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
-                    ], $statement),
+                    ]),
                 ],
             ],
         ]);
 
-        $builder = FederationToken::getBuilder();
-        $statement = $builder->getStatement();
+        $statement = FederationToken::getStatements();
 
         // "qcs::cam::uid/{uid}:uin/{uin}"
         $this->assertSame(['qcs' => ['qcs::cam::uid/mock-uid-from-cos:uin/mock-uin']], $statement[0]['principal']);
@@ -142,7 +141,7 @@ class FeatureTest extends TestCase
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/%s:bucketA-%s/*',
-                'ap-tokyo',
+                'ap-guangzhou',
                 'mock-uid-from-cos',
                 'mock-uid-from-cos',
             ),
@@ -153,7 +152,7 @@ class FeatureTest extends TestCase
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/%s:bucketA-%s/%s/%s/*',
-                'ap-tokyo',
+                'ap-guangzhou',
                 'mock-uid-from-cos',
                 'mock-uid-from-cos',
                 time(),
@@ -166,7 +165,7 @@ class FeatureTest extends TestCase
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/1238423:bucketB-%s/%s/%s/%s/%s/object2',
-                'ap-tokyo',
+                'ap-guangzhou',
                 'mock-appid',
                 date('Ymd'),
                 date('Y'),

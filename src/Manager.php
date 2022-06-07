@@ -6,7 +6,11 @@ use Closure;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Pure;
+use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
+use Overtrue\LaravelQcloudFederationToken\Strategies\StackStrategy;
+use Overtrue\LaravelQcloudFederationToken\Strategies\Strategy;
+
 use function array_key_first;
 
 class Manager
@@ -45,10 +49,14 @@ class Manager
     /**
      * @throws InvalidArgumentException
      */
-    protected function createStrategy($strategy): Strategy
+    protected function createStrategy($strategy): StrategyInterface
     {
+        $strategyConfig = $this->getStrategyConfig($strategy);
+
         if (isset($this->customCreators[$strategy])) {
             return $this->callCustomCreator($strategy);
+        } elseif (array_key_exists('strategies', $strategyConfig)) {
+            return $this->createStackStrategy($strategyConfig);
         } elseif (\array_key_exists($strategy, $this->config->get('strategies'))) {
             $method = 'create'.Str::studly($strategy).'Strategy';
 
@@ -56,10 +64,24 @@ class Manager
                 return $this->$method();
             }
 
-            return new Strategy($this->getStrategyConfig($strategy));
+            return new Strategy($strategyConfig);
         }
 
         throw new InvalidArgumentException("Strategy [$strategy] not supported.");
+    }
+
+    /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     */
+    protected function createStackStrategy($config): StrategyInterface
+    {
+        $strategies = [];
+
+        foreach ($config['strategies'] ?? [] as $name) {
+            $strategies[] = $this->strategy($name);
+        }
+
+        return new StackStrategy($strategies, $config);
     }
 
     protected function getStrategyConfig(string $strategyName): array
@@ -76,7 +98,7 @@ class Manager
         );
     }
 
-    protected function callCustomCreator(string $strategy): Strategy
+    protected function callCustomCreator(string $strategy): StrategyInterface
     {
         return $this->customCreators[$strategy]($this->config->get("strategies.{$strategy}"));
     }
@@ -89,7 +111,7 @@ class Manager
     }
 
     /**
-     * @return array<Strategy>
+     * @return array<StrategyInterface>
      */
     public function getStrategies(): array
     {

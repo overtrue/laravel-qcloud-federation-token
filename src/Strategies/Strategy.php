@@ -1,15 +1,20 @@
 <?php
 
-namespace Overtrue\LaravelQcloudFederationToken;
+namespace Overtrue\LaravelQcloudFederationToken\Strategies;
 
 use Illuminate\Config\Repository;
+use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
+use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
+use Overtrue\LaravelQcloudFederationToken\Statement;
 
 /**
  * @see https://cloud.tencent.com/document/product/598/10603
  */
-class Strategy
+class Strategy implements StrategyInterface
 {
+    use BuildTokens;
+
     protected Repository $config;
 
     #[Pure]
@@ -20,12 +25,12 @@ class Strategy
         }
     }
 
-    public function getSecretId()
+    public function getSecretId(): string
     {
         return $this->config->get('secret_id');
     }
 
-    public function getSecretKey()
+    public function getSecretKey(): string
     {
         return $this->config->get('secret_key');
     }
@@ -76,37 +81,31 @@ class Strategy
     }
 
     /**
-     * @throws Exceptions\HttpException
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
-    public function build(): Token
+    #[ArrayShape([['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"]])]
+    public function getStatements(): array
     {
-        return $this->getBuilder()->build();
-    }
+        $statement = new Statement($this->getVariables());
 
-    public function getBuilder(): Builder
-    {
-        $builder = new Builder($this->getSecretId(), $this->getSecretKey(), $this->getRegion(), $this->getEndpoint(), $this->getVariables());
+        $statement->effect($this->getEffect());
 
         if (!empty($this->getPrincipal())) {
-            $builder->principal($this->getPrincipal());
+            $statement->principal($this->getPrincipal());
         }
 
         if (!empty($this->getActions())) {
-            $builder->actions($this->getActions());
+            $statement->actions($this->getActions());
         }
 
         if (!empty($this->getResources())) {
-            $builder->resources($this->getResources());
+            $statement->resources($this->getResources());
         }
 
         if (!empty($this->getConditions())) {
-            $builder->conditions($this->getConditions());
+            $statement->conditions($this->getConditions());
         }
 
-        if ($this->getExpiresIn() !== null) {
-            $builder->expiresIn($this->getExpiresIn());
-        }
-
-        return $builder;
+        return [array_filter($statement->toArray())];
     }
 }
