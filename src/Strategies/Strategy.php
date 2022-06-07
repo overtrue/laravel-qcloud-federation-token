@@ -6,6 +6,7 @@ use Illuminate\Config\Repository;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
+use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException;
 use Overtrue\LaravelQcloudFederationToken\Statement;
 
 /**
@@ -35,34 +36,14 @@ class Strategy implements StrategyInterface
         return $this->config->get('secret_key');
     }
 
-    public function getPrincipal()
-    {
-        return $this->config->get('principal');
-    }
-
-    public function getEndpoint()
+    public function getEndpoint(): ?string
     {
         return $this->config->get('endpoint');
     }
 
-    public function getRegion()
+    public function getRegion(): ?string
     {
         return $this->config->get('region');
-    }
-
-    public function getEffect(): string
-    {
-        return $this->config->get('effect', 'allow');
-    }
-
-    public function getActions(): array
-    {
-        return $this->config->get('action', []);
-    }
-
-    public function getConditions(): array
-    {
-        return $this->config->get('condition', []);
     }
 
     public function getResources(): array
@@ -70,12 +51,12 @@ class Strategy implements StrategyInterface
         return $this->config->get('resource', []);
     }
 
-    public function getExpiresIn()
+    public function getExpiresIn(): int
     {
-        return $this->config->get('expires_in', 1800);
+        return $this->config->get('expires_in', $this->config->get('duration_seconds', 1800));
     }
 
-    public function getVariables()
+    public function getVariables(): array
     {
         return $this->config->get('variables', []);
     }
@@ -86,26 +67,18 @@ class Strategy implements StrategyInterface
     #[ArrayShape([['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"]])]
     public function getStatements(): array
     {
-        $statement = new Statement($this->getVariables());
+        $statements = $this->config->get('statements');
 
-        $statement->effect($this->getEffect());
-
-        if (!empty($this->getPrincipal())) {
-            $statement->principal($this->getPrincipal());
+        if (empty($statements)) {
+            throw new InvalidConfigException('No statements found.');
         }
 
-        if (!empty($this->getActions())) {
-            $statement->actions($this->getActions());
+        $formatted = [];
+
+        foreach ($statements as $config) {
+            $formatted[] = array_filter((new Statement($config))->withVariables($this->getVariables())->toArray());
         }
 
-        if (!empty($this->getResources())) {
-            $statement->resources($this->getResources());
-        }
-
-        if (!empty($this->getConditions())) {
-            $statement->conditions($this->getConditions());
-        }
-
-        return [array_filter($statement->toArray())];
+        return $formatted;
     }
 }

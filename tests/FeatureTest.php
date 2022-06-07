@@ -50,16 +50,18 @@ class FeatureTest extends TestCase
                     'expired_at' => '+1 hour',
                 ],
                 'strategies' => [
-                    'cvm' => array_merge([
+                    'cvm' => [
                         'secret_id' => 'secret-id',
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
-                    ], $statement),
+                        'statements' => [$statement],
+                    ],
 
-                    'cos' => array_merge([
+                    'cos' => [
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
-                    ], $statement),
+                        'statements' => [$statement],
+                    ],
                 ],
             ],
         ]);
@@ -113,7 +115,7 @@ class FeatureTest extends TestCase
                     ],
                 ],
                 'strategies' => [
-                    'cos' => array_merge($statement, [
+                    'cos' => [
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
                         'variables' => [
@@ -122,12 +124,14 @@ class FeatureTest extends TestCase
                             'appid' => 'mock-appid',
                             'var2' => 'mock-var2',
                         ],
-                    ]),
-                    'cvm' => array_merge($statement, [
+                        'statements' => [$statement],
+                    ],
+                    'cvm' => [
                         'secret_id' => 'secret-id',
                         'secret_key' => 'secret-key',
                         'region' => 'ap-tokyo',
-                    ]),
+                        'statements' => [$statement],
+                    ],
                 ],
             ],
         ]);

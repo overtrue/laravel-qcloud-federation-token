@@ -51,7 +51,7 @@ class Manager
      */
     protected function createStrategy($strategy): StrategyInterface
     {
-        $strategyConfig = $this->getStrategyConfig($strategy);
+        $strategyConfig = $this->config->get("strategies.{$strategy}");
 
         if (isset($this->customCreators[$strategy])) {
             return $this->callCustomCreator($strategy);
@@ -64,7 +64,7 @@ class Manager
                 return $this->$method();
             }
 
-            return new Strategy($strategyConfig);
+            return new Strategy($this->getStrategyConfig($strategy));
         }
 
         throw new InvalidArgumentException("Strategy [$strategy] not supported.");

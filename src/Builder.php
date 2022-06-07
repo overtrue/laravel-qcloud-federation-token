@@ -36,7 +36,7 @@ class Builder
 
         $request->fromJsonString(
             json_encode([
-                'Name' => $name ?? config('app.name'),
+                'Name' => $name ?? config('app.name').'.'.uniqid(),
                 'Policy' => json_encode([
                     'version' => '2.0',
                     'statement' => $statements,

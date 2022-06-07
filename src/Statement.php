@@ -15,10 +15,28 @@ class Statement
     protected array $actions = [];
     protected array $resources = [];
     protected array $conditions = [];
+    protected array $variables = [];
     protected string $effect = 'allow';
 
-    public function __construct(protected ?array $variables = [])
+    public function __construct(array $config = [])
     {
+        $this->effect($config['effect'] ?? 'allow');
+
+        if (!empty($config['principal'])) {
+            $this->principal($config['principal']);
+        }
+
+        if (!empty($config['action'])) {
+            $this->actions($config['action']);
+        }
+
+        if (!empty($config['resource'])) {
+            $this->resources($config['resource']);
+        }
+
+        if (!empty($config['condition'])) {
+            $this->conditions($config['condition']);
+        }
     }
 
     public function withVariables(array $variables): static

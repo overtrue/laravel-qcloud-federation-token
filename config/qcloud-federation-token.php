@@ -25,28 +25,31 @@ return [
 //        'all' => [
 //            'strategies' => ['images'],
 //        ],
-        // 请参考：https://cloud.tencent.com/document/product/598/10603
 //        'images' => [
-//            "resource" => [
-//                "qcs::cos:ap-guangzhou:uid/<appid>:<bucket>-<appid>/screens/<Y>/<m>/<d>/<prefix>/*",
+//            // 策略名称，可选
+//            'name' => 'cos-put',
+//            // 临时凭证过期时间
+//            'expires_in' => 1800,
+//
+//            // 将与默认配置合并
+//            'variables' => [
+//                'appid' => env('QCLOUD_APP_ID'),
+//                'bucket' => env('QCLOUD_COS_BUCKET', ''),
+//                //...
 //            ],
-//            "condition" => [
-//                "string_equal_ignore_case" => [
-//                    // 限制上传 MIME
-//                    "cos:content-type" => [
-//                        'image/pjpeg',
-//                        'image/png',
-//                        'image/bmp',
-//                        'image/x-windows-bmp',
-//                        'image/gif',
-//                        'image/webp',
+//
+//            //Statement 请参考：https://cloud.tencent.com/document/product/598/10603
+//            "statements" => [
+//                [
+//                    "action" => [
+//                        "cos:PutObject",
+//                        "cos:GetObject",
 //                    ],
-//                ],
-//                "numeric_less_than_equal" => [
-//                    // 限制上传大小
-//                    "cos:content-length" => 100 * 1024 * 1024
+//                    "resource" => [
+//                        "qcs::cos:ap-beijing:uid/{uid}:{bucket}-{appid}/{date}/{uuid}/*",
+//                    ],
 //                ]
-//            ]
+//            ],
 //        ],
     ],
 ];
