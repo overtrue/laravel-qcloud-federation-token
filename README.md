@@ -41,18 +41,12 @@ return [
         'secret_id' => env('QCLOUD_COS_SECRET_ID', ''),
         'secret_key' => env('QCLOUD_COS_SECRET_KEY', ''),
         'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
-        "principal" => [
-            "qcs" => [
-                "qcs::cam::uid/{uid}:uin/{uin}",
-            ]
-        ],
-        
         "effect" => "allow",
         
         // 全局变量，会被替换到所有策略中
         'variables' => [
-            'uid' => env('QCLOUD_UID'),
-            'uin' => env('QCLOUD_UIN', ''),
+            'uid' => env('QCLOUD_APP_ID'),
+            'uin' => env('QCLOUD_UIN'),
             'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
             //...
         ],
@@ -62,6 +56,7 @@ return [
         'cos' => [
             // 策略名称，可选
             'name' => 'cos-put',
+            
             // 临时凭证过期时间
             'expires_in' => 1800,
             
@@ -107,21 +102,13 @@ return [
 return [
     // 默认配置，strategies 下的每一个策略将合并此基础配置
     'default' => [
-        'secret_id' => env('QCLOUD_COS_SECRET_ID', ''),
-        'secret_key' => env('QCLOUD_COS_SECRET_KEY', ''),
+        'secret_id' => env('QCLOUD_COS_SECRET_ID'),
+        'secret_key' => env('QCLOUD_COS_SECRET_KEY'),
         'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
-        "principal" => [
-            "qcs" => [
-                "qcs::cam::uid/{uid}:uin/{uin}",
-            ]
-        ],
-        
         "effect" => "allow",
         
         // 全局变量，会被替换到所有策略中
         'variables' => [
-            'uid' => env('QCLOUD_UID'),
-            'uin' => env('QCLOUD_UIN', ''),
             'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
             //...
         ],
@@ -133,7 +120,7 @@ return [
             // 将与默认配置合并
             'variables' => [
                 'appid' => env('QCLOUD_APP_ID'),
-                'bucket' => env('QCLOUD_COS_BUCKET', ''),
+                'bucket' => env('QCLOUD_COS_BUCKET'),
                 //...
             ],
             "statements" => [
