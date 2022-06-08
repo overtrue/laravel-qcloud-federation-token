@@ -44,7 +44,7 @@ class FeatureTest extends TestCase
         ];
 
         config([
-            'qcloud-federation-token' => [
+            'federation-token' => [
                 'default' => [
                     'secret_id' => 'default-secret-id',
                     'expired_at' => '+1 hour',
@@ -103,7 +103,7 @@ class FeatureTest extends TestCase
         ];
 
         config([
-            'qcloud-federation-token' => [
+            'federation-token' => [
                 'default' => [
                     'secret_id' => 'default-secret-id',
                     'expired_at' => '+1 hour',

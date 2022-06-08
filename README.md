@@ -28,13 +28,13 @@ $ composer require overtrue/laravel-qcloud-federation-token -vvv
 
 ### 配置
 
-你可以通过以下命令将配置文件写入 `config/qcloud-federation-token.php`:
+你可以通过以下命令将配置文件写入 `config/federation-token.php`:
 
 ```php
 $ php artisan vendor:publish --provider="Overtrue\\LaravelQCloudFederationToken\\QCloudFederationTokenServiceProvider"
 ```
 
-**config/qcloud-federation-token.php**
+**config/federation-token.php**
 
 ```php
 return [
@@ -107,7 +107,7 @@ return [
 > 仅 principal 和 resource 中的变量可以替换，其他变量不支持替换。
 
 ```php
-// config/qcloud-federation-token.php
+// config/federation-token.php
 <?php
 
 return [
