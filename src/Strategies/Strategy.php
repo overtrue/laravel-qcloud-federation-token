@@ -77,6 +77,10 @@ class Strategy implements StrategyInterface
             throw new InvalidConfigException('No statements found.');
         }
 
-        return array_map(fn ($config) => (new Statement($config))->setVariables($this->getVariables())->toArray(), $statements);
+        $variables = array_merge([
+            'region' => $this->getRegion(),
+        ], $this->getVariables());
+
+        return array_map(fn ($config) => (new Statement($config))->setVariables($variables)->toArray(), $statements);
     }
 }

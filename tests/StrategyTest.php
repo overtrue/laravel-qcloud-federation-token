@@ -12,7 +12,7 @@ class StrategyTest extends TestCase
         $strategy = new Strategy('cos', [
             'secret_id' => 'secretId',
             'secret_key' => 'secretKey',
-            'region' => 'region',
+            'region' => 'ap-guangzhou',
             'statements' => [
                 [
                     "principal" => [
@@ -27,7 +27,7 @@ class StrategyTest extends TestCase
                     ],
                     "resource" => [
                         "qcs::cos:ap-beijing:uid/1238423:bucketA-1238423/*",
-                        "qcs::cos:ap-guangzhou:uid/1238423:bucketB-1238423/object2"
+                        "qcs::cos:<region>:uid/1238423:bucketB-1238423/object2"
                     ],
                     "condition" => [
                         "ip_equal" => [
@@ -42,7 +42,7 @@ class StrategyTest extends TestCase
 
         $this->assertSame('secretId', $strategy->getSecretId());
         $this->assertSame('secretKey', $strategy->getSecretKey());
-        $this->assertSame('region', $strategy->getRegion());
+        $this->assertSame('ap-guangzhou', $strategy->getRegion());
         $this->assertSame('deny', $statement['effect']);
         $this->assertSame([
             'cos:PutObject',
