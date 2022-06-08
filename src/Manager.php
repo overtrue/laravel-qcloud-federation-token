@@ -49,31 +49,31 @@ class Manager
     /**
      * @throws InvalidArgumentException
      */
-    protected function createStrategy($strategy): StrategyInterface
+    protected function createStrategy($name): StrategyInterface
     {
-        $strategyConfig = $this->config->get("strategies.{$strategy}");
+        $strategyConfig = $this->config->get("strategies.{$name}");
 
-        if (isset($this->customCreators[$strategy])) {
-            return $this->callCustomCreator($strategy);
+        if (isset($this->customCreators[$name])) {
+            return $this->callCustomCreator($name);
         } elseif (array_key_exists('strategies', $strategyConfig)) {
-            return $this->createStackStrategy($strategyConfig);
-        } elseif (\array_key_exists($strategy, $this->config->get('strategies'))) {
-            $method = 'create'.Str::studly($strategy).'Strategy';
+            return $this->createStackStrategy($name, $strategyConfig);
+        } elseif (\array_key_exists($name, $this->config->get('strategies'))) {
+            $method = 'create'.Str::studly($name).'Strategy';
 
             if (method_exists($this, $method)) {
                 return $this->$method();
             }
 
-            return new Strategy($this->getStrategyConfig($strategy));
+            return new Strategy($name, $this->getStrategyConfig($name));
         }
 
-        throw new InvalidArgumentException("Strategy [$strategy] not supported.");
+        throw new InvalidArgumentException("Strategy [$name] not supported.");
     }
 
     /**
      * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
-    protected function createStackStrategy($config): StrategyInterface
+    protected function createStackStrategy(string $strategyName, array $config): StrategyInterface
     {
         $strategies = [];
 
@@ -81,7 +81,7 @@ class Manager
             $strategies[] = $this->strategy($name);
         }
 
-        return new StackStrategy($strategies, $config);
+        return new StackStrategy($strategies, $strategyName, $config);
     }
 
     protected function getStrategyConfig(string $strategyName): array

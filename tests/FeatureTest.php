@@ -138,10 +138,10 @@ class FeatureTest extends TestCase
 
         $statement = FederationToken::getStatements();
 
-        // "qcs::cam::uid/{uid}:uin/{uin}"
+        // "qcs::cam::uid/<uid>:uin/<uin>"
         $this->assertSame(['qcs' => ['qcs::cam::uid/mock-uid-from-cos:uin/mock-uin']], $statement[0]['principal']);
 
-        // "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/*",
+        // "qcs::cos:{region}:uid/<uid>:bucketA-<uid>/*",
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/%s:bucketA-%s/*',
@@ -152,7 +152,7 @@ class FeatureTest extends TestCase
             $statement[0]['resource'][0]
         );
 
-        // "qcs::cos:{region}:uid/{uid}:bucketA-{uid}/{timestamp}/{var2}/*",
+        // "qcs::cos:<region>:uid/<uid>:bucketA-<uid>/<timestamp>/<var2>/*",
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/%s:bucketA-%s/%s/%s/*',
@@ -165,7 +165,7 @@ class FeatureTest extends TestCase
             $statement[0]['resource'][1]
         );
 
-        // "qcs::cos:{region}:uid/1238423:bucketB-{appid}/{date}/{Y}/{m}/{d}/object2"
+        // "qcs::cos:<region>:uid/1238423:bucketB-<appid>/<date>/<Y>/<m>/<d>/object2"
         $this->assertSame(
             sprintf(
                 'qcs::cos:%s:uid/1238423:bucketB-%s/%s/%s/%s/%s/object2',

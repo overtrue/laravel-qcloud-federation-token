@@ -9,7 +9,7 @@ class StrategyTest extends TestCase
 {
     public function test_getters()
     {
-        $strategy = new Strategy([
+        $strategy = new Strategy('cos', [
             'secret_id' => 'secretId',
             'secret_key' => 'secretKey',
             'region' => 'region',

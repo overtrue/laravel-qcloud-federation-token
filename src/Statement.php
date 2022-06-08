@@ -2,51 +2,55 @@
 
 namespace Overtrue\LaravelQcloudFederationToken;
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
-
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 
 use function json_encode;
 
-class Statement
+class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
 {
     protected array $principal = [];
-    protected array $actions = [];
-    protected array $resources = [];
-    protected array $conditions = [];
+    protected array $action = [];
+    protected array $resource = [];
+    protected array $condition = [];
     protected array $variables = [];
     protected string $effect = 'allow';
 
+    /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     */
     public function __construct(array $config = [])
     {
-        $this->effect($config['effect'] ?? 'allow');
+        $this->setEffect($config['effect'] ?? 'allow');
 
         if (!empty($config['principal'])) {
-            $this->principal($config['principal']);
+            $this->setPrincipal($config['principal']);
         }
 
         if (!empty($config['action'])) {
-            $this->actions($config['action']);
+            $this->setAction($config['action']);
         }
 
         if (!empty($config['resource'])) {
-            $this->resources($config['resource']);
+            $this->setResource($config['resource']);
         }
 
         if (!empty($config['condition'])) {
-            $this->conditions($config['condition']);
+            $this->setCondition($config['condition']);
         }
     }
 
-    public function withVariables(array $variables): static
+    public function setVariables(array $variables): static
     {
         $this->variables = $variables;
 
         return $this;
     }
 
-    public function principal(array $principal): static
+    public function setPrincipal(array $principal): static
     {
         $this->principal = $principal;
 
@@ -56,7 +60,7 @@ class Statement
     /**
      * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
-    public function effect(string $effect): static
+    public function setEffect(string $effect): static
     {
         if (!in_array($effect, ['allow', 'deny'])) {
             throw new InvalidArgumentException('Invalid effect value.');
@@ -81,23 +85,23 @@ class Statement
         return $this;
     }
 
-    public function actions(array $actions): static
+    public function setAction(array $action): static
     {
-        $this->actions = $actions;
+        $this->action = $action;
 
         return $this;
     }
 
-    public function resources(array $resources): static
+    public function setResource(array $resource): static
     {
-        $this->resources = $resources;
+        $this->resource = $resource;
 
         return $this;
     }
 
-    public function conditions(array $conditions): static
+    public function setCondition(array $condition): static
     {
-        $this->conditions = $conditions;
+        $this->condition = $condition;
 
         return $this;
     }
@@ -112,18 +116,16 @@ class Statement
     {
         $principal = $this->principal;
 
-        if (!empty($principal)) {
+        if (!empty($principal['qcs'])) {
             $principal['qcs'] = array_map([$this, 'replaceVariables'], $principal['qcs']);
         }
-
-        $resources = array_map([$this, 'replaceVariables'], $this->resources);
 
         return [
             'principal' => $principal,
             'effect' => $this->effect,
-            'action' => $this->actions,
-            'resource' => $resources,
-            'condition' => $this->conditions,
+            'action' => $this->action,
+            'resource' => array_map([$this, 'replaceVariables'], $this->resource),
+            'condition' => $this->condition,
         ];
     }
 
@@ -150,5 +152,39 @@ class Statement
         ], $variables);
 
         return str_replace(array_keys($replacements), array_values($replacements), $string);
+    }
+
+    public function toJson($options = 0): bool|string
+    {
+        return json_encode($this->toArray());
+    }
+
+    #[ArrayShape(['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"])]
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return property_exists($this, $offset);
+    }
+
+    public function offsetGet(mixed $offset)
+    {
+        return $this->toArray()[$offset] ?? null;
+    }
+
+    public function offsetSet(mixed $offset, mixed $value)
+    {
+        $method = sprintf("set%s", ucfirst($offset));
+
+        if (method_exists($this, $method)) {
+            $this->$method($value);
+        }
+    }
+
+    public function offsetUnset(mixed $offset)
+    {
     }
 }

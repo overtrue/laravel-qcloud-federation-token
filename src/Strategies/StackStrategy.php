@@ -6,6 +6,7 @@ use Illuminate\Config\Repository;
 use JetBrains\PhpStorm\ArrayShape;
 use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException;
+use Overtrue\LaravelQcloudFederationToken\Statement;
 
 class StackStrategy implements StrategyInterface
 {
@@ -13,11 +14,14 @@ class StackStrategy implements StrategyInterface
 
     protected Repository $config;
 
-    public function __construct(protected array $strategies, ?array $config = null)
+    public function __construct(protected array $strategies, protected string $name, array $config)
     {
-        if ($config) {
-            $this->config = new Repository($config);
-        }
+        $this->config = new Repository($config);
+    }
+
+    public function getName()
+    {
+        return $this->config->get('name', $this->name);
     }
 
     /**
@@ -52,11 +56,17 @@ class StackStrategy implements StrategyInterface
         return $this->config->get('secret_key') ?? $this->getDefaultStrategy()->getSecretKey();
     }
 
+    /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     */
     public function getExpiresIn(): int
     {
         return $this->config->get('expires_in', $this->config->get('duration_seconds', 1800)) ?? $this->getDefaultStrategy()->getExpiresIn();
     }
 
+    /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     */
     public function getVariables(): array
     {
         return $this->config->get('variables', []) ?? $this->getDefaultStrategy()->getVariables();
@@ -76,7 +86,7 @@ class StackStrategy implements StrategyInterface
         throw new InvalidConfigException('Invalid stack strategy config, no available strategy found.');
     }
 
-    #[ArrayShape([['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"]])]
+    #[ArrayShape([Statement::class])]
     public function getStatements(): array
     {
         $statements = [];

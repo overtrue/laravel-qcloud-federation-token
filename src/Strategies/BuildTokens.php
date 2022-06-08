@@ -7,11 +7,17 @@ use Overtrue\LaravelQcloudFederationToken\Token;
 
 trait BuildTokens
 {
-    public function build(): Token
+    /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     */
+    public function createToken(): Token
     {
-        return $this->getBuilder()->build($this->getStatements());
+        return $this->getBuilder()->build($this->getStatements(), $this->getExpiresIn(), $this->getName());
     }
 
+    /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     */
     public function getBuilder(): Builder
     {
         return new Builder($this->getSecretId(), $this->getSecretKey(), $this->getRegion(), $this->getEndpoint());

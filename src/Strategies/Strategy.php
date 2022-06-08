@@ -19,11 +19,14 @@ class Strategy implements StrategyInterface
     protected Repository $config;
 
     #[Pure]
-    public function __construct(?array $config = null)
+    public function __construct(protected string $name, array $config)
     {
-        if ($config) {
-            $this->config = new Repository($config);
-        }
+        $this->config = new Repository($config);
+    }
+
+    public function getName()
+    {
+        return $this->config->get('name', $this->name);
     }
 
     public function getSecretId(): string
@@ -62,9 +65,10 @@ class Strategy implements StrategyInterface
     }
 
     /**
+     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
      * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
      */
-    #[ArrayShape([['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"]])]
+    #[ArrayShape([Statement::class])]
     public function getStatements(): array
     {
         $statements = $this->config->get('statements');
@@ -73,12 +77,6 @@ class Strategy implements StrategyInterface
             throw new InvalidConfigException('No statements found.');
         }
 
-        $formatted = [];
-
-        foreach ($statements as $config) {
-            $formatted[] = array_filter((new Statement($config))->withVariables($this->getVariables())->toArray());
-        }
-
-        return $formatted;
+        return array_map(fn ($config) => (new Statement($config))->setVariables($this->getVariables())->toArray(), $statements);
     }
 }

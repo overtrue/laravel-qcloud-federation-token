@@ -20,5 +20,5 @@ interface StrategyInterface
      * @return array<string, string>
      */
     public function getVariables(): array;
-    public function build(): Token;
+    public function createToken(): Token;
 }
