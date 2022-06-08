@@ -13,6 +13,8 @@ Laravel [腾讯云联合身份临时访问凭证](https://cloud.tencent.com/docu
 开始之前，请您仔细阅读并理解一下官方文档：
 
 - [获取联合身份临时访问凭证](https://cloud.tencent.com/document/product/1312/48195)
+- [COS API 授权策略使用指引](https://cloud.tencent.com/document/product/436/31923)
+- [条件键说明及使用示例](https://cloud.tencent.com/document/product/436/71307)
 - [CAM 策略语法](https://cloud.tencent.com/document/product/598/10603)
 - [临时证书](https://cloud.tencent.com/document/api/1312/48198#Credentials)
 - [API Doctor(使用诊断)](https://console.cloud.tencent.com/api/diagnosis)
@@ -87,6 +89,16 @@ return [
 配置语法请参考：https://cloud.tencent.com/document/product/598/10603
 
 你可以根据使用场景配置多个策略，然后按策略分发访问凭证。
+
+### 安全提醒
+
+临时 token 规则配置不合理，可能会造成安全问题，请谨慎配置，请严格检查如下：
+
+- 配置前请仔细阅读：[《用于前端直传 COS 的临时密钥安全指引》](https://cloud.tencent.com/document/product/436/40265)
+- 凭证生命周期不要设置过长。
+- 避免使用主账号来生成凭证，专用的限制登录的 API 子账号。
+- 按照[《条件键说明及使用示例》](https://cloud.tencent.com/document/product/436/71307) 添加请求限制如上传大小和类型等。
+- 将账号权限控制在尽量小的范围内，避免越权操作。
 
 ### 变量替换
 
@@ -194,9 +206,9 @@ $token->toArray();
 
 ### 事件
 
-| **Event**                                    | **Description**     |
-|----------------------------------------------|---------------------|
-| `Overtrue\LaravelPackage\Events\SampleEvent` | Sample description. |
+| **Event**                                                   | **Description** |
+|-------------------------------------------------------------|--------------|
+| `Overtrue\LaravelQcloudFederationToken\Events\TokenCreated` | token 生成时触发  |
 
 ## :heart: 赞助我
 
