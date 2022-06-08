@@ -45,8 +45,7 @@ return [
         
         // 全局变量，会被替换到所有策略中
         'variables' => [
-            'uid' => env('QCLOUD_APP_ID'),
-            'uin' => env('QCLOUD_UIN'),
+            'uid' => env('QCLOUD_COS_APP_ID'),
             'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
             //...
         ],
@@ -62,7 +61,7 @@ return [
             
             // 将与默认配置合并
             'variables' => [
-                'appid' => env('QCLOUD_APP_ID'),
+                'appid' => env('QCLOUD_COS_APP_ID'),
                 'bucket' => env('QCLOUD_COS_BUCKET', ''),
                 //...
             ],
@@ -119,7 +118,7 @@ return [
         'cos' => [
             // 将与默认配置合并
             'variables' => [
-                'appid' => env('QCLOUD_APP_ID'),
+                'appid' => env('QCLOUD_COS_APP_ID'),
                 'bucket' => env('QCLOUD_COS_BUCKET'),
                 //...
             ],
@@ -175,9 +174,11 @@ return [
 ```php
 use Overtrue\LaravelQCloudFederationToken\FederationToken;
 
-$token = FederationToken::build();
+// 使用默认策略（配置项 strategies 中第一个）
+$token = FederationToken::createToken();
+
 // 或者指定策略
-$token = FederationToken::strategy('cos')->build();
+$token = FederationToken::strategy('cos')->createToken();
 
 $token->toArray();
 
