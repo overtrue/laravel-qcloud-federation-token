@@ -90,6 +90,10 @@ return [
 
 你可以根据使用场景配置多个策略，然后按策略分发访问凭证。
 
+> **Warning**
+> 
+> 注意：`condition` 中使用 `cos:content-type` 记得 urlencode, 不然遇到带+号的 MIME 将会失效，比如 `image/svg+xml`。
+
 ### 安全提醒
 
 临时 token 规则配置不合理，可能会造成安全问题，请谨慎配置，请严格检查如下：
