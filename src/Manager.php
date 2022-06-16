@@ -4,6 +4,7 @@ namespace Overtrue\LaravelQcloudFederationToken;
 
 use Closure;
 use Illuminate\Config\Repository;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Pure;
 use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
@@ -51,7 +52,7 @@ class Manager
      */
     protected function createStrategy($name): StrategyInterface
     {
-        $strategyConfig = $this->config->get("strategies.{$name}");
+        $strategyConfig = $this->getStrategyConfig($name);
 
         if (isset($this->customCreators[$name])) {
             return $this->callCustomCreator($name);
@@ -64,7 +65,7 @@ class Manager
                 return $this->$method();
             }
 
-            return new Strategy($name, $this->getStrategyConfig($name));
+            return new Strategy($name, $strategyConfig);
         }
 
         throw new InvalidArgumentException("Strategy [$name] not supported.");
@@ -86,16 +87,19 @@ class Manager
 
     protected function getStrategyConfig(string $strategyName): array
     {
-        $variables = array_merge(
+        $defaultConfig = $this->config->get('default');
+        $strategyConfig = array_merge($defaultConfig, $this->config->get("strategies.$strategyName", []));
+
+        $strategyConfig['variables'] = array_merge(
             $this->config->get('default.variables', []),
             $this->config->get("strategies.{$strategyName}.variables", [])
         );
 
-        return \array_merge(
-            $this->config->get('default', []),
-            $this->config->get("strategies.$strategyName", []),
-            compact('variables')
-        );
+        $defaultStatement = Arr::only($defaultConfig, ['action', 'effect', 'principal', 'resource', 'condition']);
+
+        $strategyConfig['statements'] = array_map(fn ($statement) => array_merge($defaultStatement, $statement), $strategyConfig['statements'] ?? []);
+
+        return $strategyConfig;
     }
 
     protected function callCustomCreator(string $strategy): StrategyInterface
