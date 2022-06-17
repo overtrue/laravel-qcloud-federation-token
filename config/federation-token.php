@@ -18,7 +18,8 @@ return [
             'appid' => env('QCLOUD_COS_APP_ID'),
         ],
     ],
-    // strategies
+    // 请注意：
+    // 官方限制了一个策略规则的总字符长度为 1000，所以一个规则尽量别写太复杂，否则可能会报错
     'strategies' => [
         // 多个策略生成一个 token
 //        'all' => [
