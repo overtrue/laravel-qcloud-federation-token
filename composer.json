@@ -10,7 +10,7 @@
   ],
   "require": {
     "php": "^8.0.2",
-    "laravel/framework": "^8.80|^9.16",
+    "laravel/framework": "^8.80|^9.0",
     "tencentcloud/tencentcloud-sdk-php": "^3.0"
   },
   "autoload": {
