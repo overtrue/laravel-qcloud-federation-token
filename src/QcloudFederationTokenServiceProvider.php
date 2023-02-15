@@ -2,9 +2,9 @@
 
 namespace Overtrue\LaravelQcloudFederationToken;
 
-use Illuminate\Support\ServiceProvider;
 use function config;
 use function dirname;
+use Illuminate\Support\ServiceProvider;
 
 class QcloudFederationTokenServiceProvider extends ServiceProvider
 {

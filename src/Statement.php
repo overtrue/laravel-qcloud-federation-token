@@ -6,17 +6,21 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
-use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
-
 use function json_encode;
+use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 
 class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
 {
     protected array $principal = [];
+
     protected array $action = [];
+
     protected array $resource = [];
+
     protected array $condition = [];
+
     protected array $variables = [];
+
     protected string $effect = 'allow';
 
     /**
@@ -26,19 +30,19 @@ class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
     {
         $this->setEffect($config['effect'] ?? 'allow');
 
-        if (!empty($config['principal'])) {
+        if (! empty($config['principal'])) {
             $this->setPrincipal($config['principal']);
         }
 
-        if (!empty($config['action'])) {
+        if (! empty($config['action'])) {
             $this->setAction($config['action']);
         }
 
-        if (!empty($config['resource'])) {
+        if (! empty($config['resource'])) {
             $this->setResource($config['resource']);
         }
 
-        if (!empty($config['condition'])) {
+        if (! empty($config['condition'])) {
             $this->setCondition($config['condition']);
         }
     }
@@ -62,7 +66,7 @@ class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
      */
     public function setEffect(string $effect): static
     {
-        if (!in_array($effect, ['allow', 'deny'])) {
+        if (! in_array($effect, ['allow', 'deny'])) {
             throw new InvalidArgumentException('Invalid effect value.');
         }
 
@@ -111,12 +115,12 @@ class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
         return json_encode($this->toArray()) ?? '';
     }
 
-    #[ArrayShape(['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"])]
+    #[ArrayShape(['principal' => 'array', 'effect' => 'string', 'action' => 'array', 'resource' => 'array', 'condition' => 'array'])]
     public function toArray(): array
     {
         $principal = $this->principal;
 
-        if (!empty($principal['qcs'])) {
+        if (! empty($principal['qcs'])) {
             $principal['qcs'] = array_map([$this, 'replaceVariables'], $principal['qcs']);
         }
 
@@ -159,7 +163,7 @@ class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
         return json_encode($this->toArray());
     }
 
-    #[ArrayShape(['principal' => "array", 'effect' => "string", 'action' => "array", 'resource' => "array", 'condition' => "array"])]
+    #[ArrayShape(['principal' => 'array', 'effect' => 'string', 'action' => 'array', 'resource' => 'array', 'condition' => 'array'])]
     public function jsonSerialize()
     {
         return $this->toArray();
@@ -177,7 +181,7 @@ class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
 
     public function offsetSet(mixed $offset, mixed $value)
     {
-        $method = sprintf("set%s", ucfirst($offset));
+        $method = sprintf('set%s', ucfirst($offset));
 
         if (method_exists($this, $method)) {
             $this->$method($value);

@@ -37,7 +37,7 @@ class Token implements Arrayable, Jsonable
         return $this->requestId;
     }
 
-    #[ArrayShape(['credentials' => "mixed", 'expired_at' => "int", 'expiration' => "string"])]
+    #[ArrayShape(['credentials' => 'mixed', 'expired_at' => 'int', 'expiration' => 'string'])]
     public function toArray(): array
     {
         return [

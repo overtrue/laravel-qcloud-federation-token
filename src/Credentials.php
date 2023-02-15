@@ -34,7 +34,7 @@ class Credentials implements Arrayable, Jsonable
         return $this->tmpSecretKey;
     }
 
-    #[ArrayShape(['token' => "string", 'tmp_secret_id' => "string", 'tmp_secret_key' => "string"])]
+    #[ArrayShape(['token' => 'string', 'tmp_secret_id' => 'string', 'tmp_secret_key' => 'string'])]
     public function toArray(): array
     {
         return [

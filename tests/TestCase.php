@@ -11,7 +11,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      * Load package service provider.
      *
      * @param  Application  $app
-     *
      * @return array<int, class-string>
      */
     protected function getPackageProviders($app): array

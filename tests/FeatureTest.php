@@ -2,9 +2,9 @@
 
 namespace Tests;
 
+use function config;
 use Illuminate\Support\Facades\Event;
 use Overtrue\LaravelQcloudFederationToken\FederationToken;
-use function config;
 
 class FeatureTest extends TestCase
 {
@@ -18,29 +18,29 @@ class FeatureTest extends TestCase
     public function test_it_can_create_token()
     {
         $statement = [
-            "principal" => [
-                "qcs" => [
-                    "qcs::cam::uid/1238423:uin/3232523"
-                ]
+            'principal' => [
+                'qcs' => [
+                    'qcs::cam::uid/1238423:uin/3232523',
+                ],
             ],
-            "effect" => "allow",
-            "action" => [
-                "cos:PutObject",
-                "cos:GetObject",
-                "cos:HeadObject",
-                "cos:OptionsObject",
-                "cos:ListParts",
-                "cos:GetObjectTagging"
+            'effect' => 'allow',
+            'action' => [
+                'cos:PutObject',
+                'cos:GetObject',
+                'cos:HeadObject',
+                'cos:OptionsObject',
+                'cos:ListParts',
+                'cos:GetObjectTagging',
             ],
-            "resource" => [
-                "qcs::cos:ap-beijing:uid/1238423:bucketA-1238423/*",
-                "qcs::cos:ap-guangzhou:uid/1238423:bucketB-1238423/object2"
+            'resource' => [
+                'qcs::cos:ap-beijing:uid/1238423:bucketA-1238423/*',
+                'qcs::cos:ap-guangzhou:uid/1238423:bucketB-1238423/object2',
             ],
-            "condition" => [
-                "ip_equal" => [
-                    "qcs:ip" => "10.121.2.10/24"
-                ]
-            ]
+            'condition' => [
+                'ip_equal' => [
+                    'qcs:ip' => '10.121.2.10/24',
+                ],
+            ],
         ];
 
         config([
@@ -66,7 +66,6 @@ class FeatureTest extends TestCase
             ],
         ]);
 
-
         $this->assertSame('secret-id', FederationToken::getSecretId());
         $this->assertSame('default-secret-id', FederationToken::strategy('cos')->getSecretId());
 
@@ -76,30 +75,30 @@ class FeatureTest extends TestCase
     public function test_it_can_replace_vars()
     {
         $statement = [
-            "principal" => [
-                "qcs" => [
-                    "qcs::cam::uid/<uid>:uin/<uin>"
-                ]
+            'principal' => [
+                'qcs' => [
+                    'qcs::cam::uid/<uid>:uin/<uin>',
+                ],
             ],
-            "effect" => "allow",
-            "action" => [
-                "cos:PutObject",
-                "cos:GetObject",
-                "cos:HeadObject",
-                "cos:OptionsObject",
-                "cos:ListParts",
-                "cos:GetObjectTagging"
+            'effect' => 'allow',
+            'action' => [
+                'cos:PutObject',
+                'cos:GetObject',
+                'cos:HeadObject',
+                'cos:OptionsObject',
+                'cos:ListParts',
+                'cos:GetObjectTagging',
             ],
-            "resource" => [
-                "qcs::cos:<region>:uid/<uid>:bucketA-<uid>/*",
-                "qcs::cos:<region>:uid/<uid>:bucketA-<uid>/<timestamp>/<var2>/*",
-                "qcs::cos:<region>:uid/1238423:bucketB-<appid>/<date>/<Y>/<m>/<d>/object2"
+            'resource' => [
+                'qcs::cos:<region>:uid/<uid>:bucketA-<uid>/*',
+                'qcs::cos:<region>:uid/<uid>:bucketA-<uid>/<timestamp>/<var2>/*',
+                'qcs::cos:<region>:uid/1238423:bucketB-<appid>/<date>/<Y>/<m>/<d>/object2',
             ],
-            "condition" => [
-                "ip_equal" => [
-                    "qcs:ip" => "10.121.2.10/24"
-                ]
-            ]
+            'condition' => [
+                'ip_equal' => [
+                    'qcs:ip' => '10.121.2.10/24',
+                ],
+            ],
         ];
 
         config([

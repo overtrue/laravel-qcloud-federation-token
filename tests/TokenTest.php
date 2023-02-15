@@ -4,10 +4,10 @@ namespace Tests;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use function json_encode;
 use Overtrue\LaravelQcloudFederationToken\Credentials;
 use Overtrue\LaravelQcloudFederationToken\Token;
 use PHPUnit\Framework\TestCase;
-use function json_encode;
 
 class TokenTest extends TestCase
 {

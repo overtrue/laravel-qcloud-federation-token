@@ -2,6 +2,7 @@
 
 namespace Overtrue\LaravelQcloudFederationToken;
 
+use function array_key_first;
 use Closure;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
@@ -12,12 +13,12 @@ use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 use Overtrue\LaravelQcloudFederationToken\Strategies\StackStrategy;
 use Overtrue\LaravelQcloudFederationToken\Strategies\Strategy;
 
-use function array_key_first;
-
 class Manager
 {
     protected Repository $config;
+
     protected array $strategies = [];
+
     protected array $customCreators;
 
     #[Pure]
@@ -40,7 +41,7 @@ class Manager
             ));
         }
 
-        if (!isset($this->strategies[$strategy])) {
+        if (! isset($this->strategies[$strategy])) {
             $this->strategies[$strategy] = $this->createStrategy($strategy);
         }
 

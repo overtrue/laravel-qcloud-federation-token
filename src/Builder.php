@@ -60,7 +60,7 @@ class Builder
 
         return match (true) {
             is_int($expiredAt) => $format($expiredAt),
-            is_object($expiredAt) => $format((int)$expiredAt->timestamp - time()),
+            is_object($expiredAt) => $format((int) $expiredAt->timestamp - time()),
             is_string($expiredAt) => $format((int) Carbon::parse($expiredAt)->timestamp - time()),
         };
     }

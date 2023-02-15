@@ -15,26 +15,26 @@ class StrategyTest extends TestCase
             'region' => 'ap-guangzhou',
             'statements' => [
                 [
-                    "principal" => [
-                        "qcs" => [
-                            "qcs::cam::uid/1238423:uin/3232523"
-                        ]
+                    'principal' => [
+                        'qcs' => [
+                            'qcs::cam::uid/1238423:uin/3232523',
+                        ],
                     ],
-                    "effect" => "deny",
-                    "action" => [
-                        "cos:PutObject",
-                        "cos:GetObject",
+                    'effect' => 'deny',
+                    'action' => [
+                        'cos:PutObject',
+                        'cos:GetObject',
                     ],
-                    "resource" => [
-                        "qcs::cos:ap-beijing:uid/1238423:bucketA-1238423/*",
-                        "qcs::cos:<region>:uid/1238423:bucketB-1238423/object2"
+                    'resource' => [
+                        'qcs::cos:ap-beijing:uid/1238423:bucketA-1238423/*',
+                        'qcs::cos:<region>:uid/1238423:bucketB-1238423/object2',
                     ],
-                    "condition" => [
-                        "ip_equal" => [
-                            "qcs:ip" => "10.121.2.10/24"
-                        ]
-                    ]
-                ]
+                    'condition' => [
+                        'ip_equal' => [
+                            'qcs:ip' => '10.121.2.10/24',
+                        ],
+                    ],
+                ],
             ],
         ]);
 
@@ -54,7 +54,7 @@ class StrategyTest extends TestCase
         ], $statement['resource']);
         $this->assertSame([
             'ip_equal' => [
-                'qcs:ip' => '10.121.2.10/24'
+                'qcs:ip' => '10.121.2.10/24',
             ],
         ], $statement['condition']);
     }
