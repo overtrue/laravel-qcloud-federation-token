@@ -5,6 +5,7 @@ namespace Overtrue\LaravelQcloudFederationToken;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JetBrains\PhpStorm\ArrayShape;
+
 use function json_encode;
 
 /**
@@ -16,8 +17,7 @@ class Credentials implements Arrayable, Jsonable
         public string $token,
         public string $tmpSecretId,
         public string $tmpSecretKey,
-    ) {
-    }
+    ) {}
 
     public function getToken(): string
     {

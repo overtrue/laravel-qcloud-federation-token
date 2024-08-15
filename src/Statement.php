@@ -6,10 +6,11 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
-use function json_encode;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 
-class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
+use function json_encode;
+
+class Statement implements \ArrayAccess, \JsonSerializable, Arrayable, Jsonable
 {
     protected array $principal = [];
 
@@ -188,7 +189,5 @@ class Statement implements Jsonable, Arrayable, \JsonSerializable, \ArrayAccess
         }
     }
 
-    public function offsetUnset(mixed $offset)
-    {
-    }
+    public function offsetUnset(mixed $offset) {}
 }

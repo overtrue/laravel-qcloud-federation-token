@@ -2,7 +2,6 @@
 
 namespace Overtrue\LaravelQcloudFederationToken;
 
-use function array_key_first;
 use Closure;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
@@ -12,6 +11,8 @@ use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 use Overtrue\LaravelQcloudFederationToken\Strategies\StackStrategy;
 use Overtrue\LaravelQcloudFederationToken\Strategies\Strategy;
+
+use function array_key_first;
 
 class Manager
 {
@@ -30,7 +31,7 @@ class Manager
     /**
      * @throws InvalidArgumentException
      */
-    public function strategy(string $strategy = null)
+    public function strategy(?string $strategy = null)
     {
         $strategy = $strategy ?: $this->getDefaultStrategy();
 

@@ -6,7 +6,5 @@ use Overtrue\LaravelQcloudFederationToken\Token;
 
 class TokenCreated
 {
-    public function __construct(public Token $token)
-    {
-    }
+    public function __construct(public Token $token) {}
 }

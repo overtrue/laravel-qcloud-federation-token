@@ -5,6 +5,7 @@ namespace Overtrue\LaravelQcloudFederationToken;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JetBrains\PhpStorm\ArrayShape;
+
 use function json_encode;
 
 class Token implements Arrayable, Jsonable
@@ -14,8 +15,8 @@ class Token implements Arrayable, Jsonable
         public int $expiredAt,
         public string $expiration,
         public string $requestId,
-    ) {
-    }
+        public array $statements = [],
+    ) {}
 
     public function getCredentials(): Credentials
     {
@@ -35,6 +36,11 @@ class Token implements Arrayable, Jsonable
     public function getRequestId(): string
     {
         return $this->requestId;
+    }
+
+    public function getStatements(): array
+    {
+        return $this->statements;
     }
 
     #[ArrayShape(['credentials' => 'mixed', 'expired_at' => 'int', 'expiration' => 'string'])]

@@ -19,20 +19,19 @@ class Builder
         protected string $secretKey,
         protected ?string $region = 'ap-guangzhou',
         protected ?string $endpoint = 'sts.tencentcloudapi.com',
-    ) {
-    }
+    ) {}
 
     public function build(array $statements, int|string|Carbon $expiresIn = 1800, ?string $name = null): Token
     {
         $credential = new Credential($this->secretId, $this->secretKey);
-        $httpProfile = new HttpProfile();
+        $httpProfile = new HttpProfile;
         $httpProfile->setEndpoint($this->endpoint ?: 'sts.tencentcloudapi.com');
 
-        $clientProfile = new ClientProfile();
+        $clientProfile = new ClientProfile;
         $clientProfile->setHttpProfile($httpProfile);
         $client = new StsClient($credential, $this->region ?: 'ap-guangzhou', $clientProfile);
 
-        $request = new GetFederationTokenRequest();
+        $request = new GetFederationTokenRequest;
 
         $request->fromJsonString(
             json_encode([
@@ -49,7 +48,13 @@ class Builder
 
         $credentials = new Credentials($response->getCredentials()->getToken(), $response->getCredentials()->getTmpSecretId(), $response->getCredentials()->getTmpSecretKey());
 
-        return tap(new Token($credentials, $response->getExpiredTime(), $response->getExpiration(), $response->getRequestId()), function ($token) {
+        return tap(new Token(
+            $credentials,
+            $response->getExpiredTime(),
+            $response->getExpiration(),
+            $response->getRequestId(),
+            $statements
+        ), function ($token) {
             event(new TokenCreated($token));
         });
     }

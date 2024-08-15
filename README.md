@@ -206,6 +206,12 @@ $token->toArray();
 // 'expired_at' => 1547696355,
 ```
 
+如果你需要获取生成 token 的配置信息，你可以使用 `getStatements` 方法：
+
+```php
+$token->getStatements();
+```
+
 格式请参考： https://cloud.tencent.com/document/product/1312/48195
 
 ### 字符限制问题

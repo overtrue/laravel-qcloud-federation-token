@@ -2,9 +2,10 @@
 
 namespace Tests;
 
-use function config;
 use Illuminate\Support\Facades\Event;
 use Overtrue\LaravelQcloudFederationToken\FederationToken;
+
+use function config;
 
 class FeatureTest extends TestCase
 {
