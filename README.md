@@ -54,9 +54,10 @@ return [
     ],
     // strategies
     'strategies' => [
-        'cos' => [
+        // 策略名称，比如：image/avatar...
+        'avatar' => [
             // 策略名称，可选
-            'name' => 'cos-put',
+            'name' => 'avatar',
             
             // 临时凭证过期时间
             'expires_in' => 1800,
@@ -99,6 +100,7 @@ return [
 临时 token 规则配置不合理，可能会造成安全问题，请谨慎配置，请严格检查如下：
 
 - 配置前请仔细阅读：[《用于前端直传 COS 的临时密钥安全指引》](https://cloud.tencent.com/document/product/436/40265)
+- 策略有限制最大长度，不建议把策略配置得太多。
 - 凭证生命周期不要设置过长。
 - 避免使用主账号来生成凭证，专用的限制登录的 API 子账号。
 - 按照[《条件键说明及使用示例》](https://cloud.tencent.com/document/product/436/71307) 添加请求限制如上传大小和类型等。
@@ -131,7 +133,7 @@ return [
     // strategies
     'strategies' => [
         // 请参考：https://cloud.tencent.com/document/product/598/10603
-        'cos' => [
+        'avatar' => [
             // 将与默认配置合并
             'variables' => [
                 'appid' => env('QCLOUD_COS_APP_ID'),
@@ -194,7 +196,7 @@ use Overtrue\LaravelQCloudFederationToken\FederationToken;
 $token = FederationToken::createToken();
 
 // 或者指定策略
-$token = FederationToken::strategy('cos')->createToken();
+$token = FederationToken::strategy('avatar')->createToken();
 
 $token->toArray();
 
