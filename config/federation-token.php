@@ -9,9 +9,12 @@ return [
         'effect' => 'allow',
         'action' => [
             'cos:PutObject',
-            'cos:GetObject',
-            'cos:HeadObject',
-            //...
+            'cos:PostObject',
+            'cos:InitiateMultipartUpload',
+            'cos:UploadPart',
+            'cos:CompleteMultipartUpload',
+            'cos:AbortMultipartUpload',
+            'cos:ListMultipartUploads',
         ],
         'variables' => [
             'bucket' => env('QCLOUD_COS_BUCKET'),
@@ -42,8 +45,13 @@ return [
         //            "statements" => [
         //                [
         //                    "action" => [
-        //                        "cos:PutObject",
-        //                        "cos:GetObject",
+                                    // 'cos:PutObject',
+                                    // 'cos:PostObject',
+                                    // 'cos:InitiateMultipartUpload',
+                                    // 'cos:UploadPart',
+                                    // 'cos:CompleteMultipartUpload',
+                                    // 'cos:AbortMultipartUpload',
+                                    // 'cos:ListMultipartUploads',
         //                    ],
         //                    "resource" => [
         //                        "qcs::cos:ap-beijing:uid/{uid}:{bucket}-{appid}/{date}/{uuid}/*",
