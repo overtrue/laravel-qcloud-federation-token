@@ -73,8 +73,14 @@ return [
             "statements" => [
                 [
                     "action" => [
-                        "cos:PutObject",
-                        "cos:GetObject",
+                        // 这里建议不要随便修改，分片上传需要用到这些
+                        'cos:PutObject',
+                        'cos:PostObject',
+                        'cos:InitiateMultipartUpload',
+                        'cos:UploadPart',
+                        'cos:CompleteMultipartUpload',
+                        'cos:AbortMultipartUpload',
+                        'cos:ListMultipartUploads',
                     ],
                     "resource" => [
                         "qcs::cos:ap-beijing:uid/<appid>:<bucket>-<appid>/<date>/<uuid>/*",
@@ -143,8 +149,13 @@ return [
             "statements" => [
                 [
                     "action" => [
-                        "cos:PutObject",
-                        "cos:GetObject",
+                        'cos:PutObject',
+                        'cos:PostObject',
+                        'cos:InitiateMultipartUpload',
+                        'cos:UploadPart',
+                        'cos:CompleteMultipartUpload',
+                        'cos:AbortMultipartUpload',
+                        'cos:ListMultipartUploads',
                     ],
                     "resource" => [
                         "qcs::cos:ap-beijing:uid/<appid>:<bucket>-<appid>/<date>/<uuid>/*",
