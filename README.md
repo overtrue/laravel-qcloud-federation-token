@@ -74,6 +74,7 @@ return [
                 [
                     "action" => [
                         // 这里建议不要随便修改，分片上传需要用到这些
+                        'cos:ListParts',
                         'cos:PutObject',
                         'cos:PostObject',
                         'cos:InitiateMultipartUpload',
@@ -149,6 +150,7 @@ return [
             "statements" => [
                 [
                     "action" => [
+                        'cos:ListParts',
                         'cos:PutObject',
                         'cos:PostObject',
                         'cos:InitiateMultipartUpload',
