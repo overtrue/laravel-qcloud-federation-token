@@ -8,6 +8,7 @@ return [
         'region' => env('QCLOUD_COS_REGION', 'ap-guangzhou'),
         'effect' => 'allow',
         'action' => [
+            'cos:ListParts',
             'cos:PutObject',
             'cos:PostObject',
             'cos:InitiateMultipartUpload',
@@ -45,6 +46,7 @@ return [
         //            "statements" => [
         //                [
         //                    "action" => [
+                                    // 'cos:ListParts',
                                     // 'cos:PutObject',
                                     // 'cos:PostObject',
                                     // 'cos:InitiateMultipartUpload',
