@@ -24,6 +24,16 @@ class Strategy implements StrategyInterface
         $this->config = new Repository($config);
     }
 
+    public function get(string $key)
+    {
+        return $this->config->get($key);
+    }
+
+    public function getHeaders()
+    {
+        return $this->config->get('headers', [])
+    }
+
     public function getName()
     {
         return $this->config->get('name', $this->name);
