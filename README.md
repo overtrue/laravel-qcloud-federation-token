@@ -86,8 +86,17 @@ return [
                     "resource" => [
                         "qcs::cos:ap-beijing:uid/<appid>:<bucket>-<appid>/<date>/<uuid>/*",
                     ],
+                    'condition' => [
+                        'string_equal' => [
+                            'cos:x-cos-forbid-overwrite' => 'true', // 禁止覆盖
+                        ],
+                    ],
                 ]
             ],
+            'headers' => [
+                // statements 包含 x 类型的 condition 需要告诉客户端传递 header
+                'x-cos-forbid-overwrite' => true,
+            ]
         ],
     ],
 ];
