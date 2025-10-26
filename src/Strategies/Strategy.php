@@ -31,7 +31,7 @@ class Strategy implements StrategyInterface
 
     public function getHeaders()
     {
-        return $this->config->get('headers', [])
+        return $this->config->get('headers', []);
     }
 
     public function getName()
