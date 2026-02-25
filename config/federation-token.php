@@ -46,14 +46,14 @@ return [
         //            "statements" => [
         //                [
         //                    "action" => [
-                                    // 'cos:ListParts',
-                                    // 'cos:PutObject',
-                                    // 'cos:PostObject',
-                                    // 'cos:InitiateMultipartUpload',
-                                    // 'cos:UploadPart',
-                                    // 'cos:CompleteMultipartUpload',
-                                    // 'cos:AbortMultipartUpload',
-                                    // 'cos:ListMultipartUploads',
+        // 'cos:ListParts',
+        // 'cos:PutObject',
+        // 'cos:PostObject',
+        // 'cos:InitiateMultipartUpload',
+        // 'cos:UploadPart',
+        // 'cos:CompleteMultipartUpload',
+        // 'cos:AbortMultipartUpload',
+        // 'cos:ListMultipartUploads',
         //                    ],
         //                    "resource" => [
         //                        "qcs::cos:ap-beijing:uid/{uid}:{bucket}-{appid}/{date}/{uuid}/*",
