@@ -20,7 +20,7 @@ class QcloudFederationTokenServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(Manager::class, function () {
+        $this->app->scoped(Manager::class, function () {
             return new Manager(config('federation-token'));
         });
     }
