@@ -25,7 +25,7 @@ class Statement implements \ArrayAccess, \JsonSerializable, Arrayable, Jsonable
     protected string $effect = 'allow';
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $config = [])
     {
@@ -63,7 +63,7 @@ class Statement implements \ArrayAccess, \JsonSerializable, Arrayable, Jsonable
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setEffect(string $effect): static
     {

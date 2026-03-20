@@ -6,6 +6,7 @@ use Illuminate\Config\Repository;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use Overtrue\LaravelQcloudFederationToken\Contracts\StrategyInterface;
+use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException;
 use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException;
 use Overtrue\LaravelQcloudFederationToken\Statement;
 
@@ -75,8 +76,8 @@ class Strategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
      */
     #[ArrayShape([Statement::class])]
     public function getStatements(): array

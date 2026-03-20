@@ -74,7 +74,7 @@ class Manager
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function createStackStrategy(string $strategyName, array $config): StrategyInterface
     {

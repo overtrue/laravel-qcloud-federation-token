@@ -3,12 +3,13 @@
 namespace Overtrue\LaravelQcloudFederationToken\Strategies;
 
 use Overtrue\LaravelQcloudFederationToken\Builder;
+use Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException;
 use Overtrue\LaravelQcloudFederationToken\Token;
 
 trait BuildTokens
 {
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function createToken(): Token
     {
@@ -16,7 +17,7 @@ trait BuildTokens
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getBuilder(): Builder
     {

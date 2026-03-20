@@ -25,7 +25,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getSecretId(): string
     {
@@ -33,7 +33,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getRegion(): ?string
     {
@@ -41,7 +41,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getEndpoint(): ?string
     {
@@ -49,7 +49,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getSecretKey(): string
     {
@@ -57,7 +57,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getExpiresIn(): int
     {
@@ -65,7 +65,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getVariables(): array
     {
@@ -73,7 +73,7 @@ class StackStrategy implements StrategyInterface
     }
 
     /**
-     * @throws \Overtrue\LaravelQcloudFederationToken\Exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getDefaultStrategy(): StrategyInterface
     {
