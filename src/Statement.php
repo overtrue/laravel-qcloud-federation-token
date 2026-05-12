@@ -165,7 +165,7 @@ class Statement implements \ArrayAccess, \JsonSerializable, Arrayable, Jsonable
     }
 
     #[ArrayShape(['principal' => 'array', 'effect' => 'string', 'action' => 'array', 'resource' => 'array', 'condition' => 'array'])]
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->toArray();
     }
@@ -175,12 +175,12 @@ class Statement implements \ArrayAccess, \JsonSerializable, Arrayable, Jsonable
         return property_exists($this, $offset);
     }
 
-    public function offsetGet(mixed $offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->toArray()[$offset] ?? null;
     }
 
-    public function offsetSet(mixed $offset, mixed $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $method = sprintf('set%s', ucfirst($offset));
 
@@ -189,5 +189,5 @@ class Statement implements \ArrayAccess, \JsonSerializable, Arrayable, Jsonable
         }
     }
 
-    public function offsetUnset(mixed $offset) {}
+    public function offsetUnset(mixed $offset): void {}
 }
