@@ -33,5 +33,7 @@ jobs:
           coverage: xdebug
       - name: Install dependencies
         run: composer install
+      - name: Runtime compatibility check
+        run: composer check-runtime-compatibility
       - name: PHPUnit check
         run: ./vendor/bin/phpunit --coverage-text

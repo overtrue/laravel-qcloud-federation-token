@@ -60,6 +60,7 @@
       "cghooks update"
     ],
     "cghooks": "vendor/bin/cghooks",
+    "check-runtime-compatibility": "php -d error_reporting=E_ALL -d display_errors=1 tests/check-runtime-compatibility.php",
     "check-style": "vendor/bin/pint --test",
     "fix-style": "vendor/bin/pint",
     "test": "phpunit --colors"
