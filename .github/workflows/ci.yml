@@ -20,9 +20,17 @@ jobs:
       - name: PHPCSFixer check
         run: composer check-style
   phpunit:
+    name: PHP ${{ matrix.php_version }} / Laravel ${{ matrix.laravel_version }}
     strategy:
+      fail-fast: false
       matrix:
         php_version: ['8.3', '8.4', '8.5']
+        laravel_version: ['12', '13']
+        include:
+          - laravel_version: '12'
+            testbench_version: '10'
+          - laravel_version: '13'
+            testbench_version: '11'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -31,8 +39,29 @@ jobs:
         with:
           php-version: ${{ matrix.php_version }}
           coverage: xdebug
+      - name: Validate Composer configuration
+        run: composer validate --strict
       - name: Install dependencies
-        run: composer install
+        run: composer update --with="laravel/framework:^${{ matrix.laravel_version }}.0" --with="orchestra/testbench:^${{ matrix.testbench_version }}.0" --prefer-dist --no-interaction --no-progress
+      - name: Verify dependency versions
+        run: |
+          php -r '
+            require "vendor/autoload.php";
+            echo "PHP: ".PHP_VERSION.PHP_EOL;
+            echo "PHPUnit: ".Composer\InstalledVersions::getPrettyVersion("phpunit/phpunit").PHP_EOL;
+            foreach (["laravel/framework" => "${{ matrix.laravel_version }}", "orchestra/testbench" => "${{ matrix.testbench_version }}"] as $package => $expected) {
+                $version = Composer\InstalledVersions::getPrettyVersion($package);
+                echo $package.": ".$version.PHP_EOL;
+                if (explode(".", ltrim($version, "v"))[0] !== $expected) {
+                    fwrite(STDERR, "Unexpected major version for ".$package.PHP_EOL);
+                    exit(1);
+                }
+            }
+          '
+      - name: Check platform requirements
+        run: composer check-platform-reqs
+      - name: Audit dependencies
+        run: composer audit
       - name: Runtime compatibility check
         run: composer check-runtime-compatibility
       - name: PHPUnit check
